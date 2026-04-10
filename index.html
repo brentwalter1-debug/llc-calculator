@@ -5,37 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <title>LLC Threshold Calculator | Professional Tax Strategist</title>
-    <meta name="description" content="Calculate self-employment tax and LLC thresholds instantly. Get a professional PDF tax strategy report.">
-    <meta name="keywords" content="LLC tax calculator, self employment tax, S-Corp threshold, tax savings">
+    <meta name="description" content="Calculate your exact self-employment tax burden and discover the LLC threshold to save thousands. Get a free, premium PDF tax strategy report instantly.">
+    <meta name="keywords" content="LLC tax calculator, self employment tax, S-Corp threshold, tax savings, business tax strategist">
+    
+    <meta property="og:title" content="LLC Tax Savings Calculator">
+    <meta property="og:description" content="Stop overpaying on taxes. Calculate your LLC threshold in 60 seconds.">
+    <meta property="og:type" content="website">
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FinancialCalculator",
+      "name": "LLC Threshold & Tax Strategist",
+      "description": "Professional tool for calculating self-employment and state tax burdens.",
+      "category": "Tax Tool",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1553305917920278" crossorigin="anonymous"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- MASTER THEME VARIABLES --- */
+        /* --- CSS THEME VARIABLES --- */
         :root {
             --primary-navy: #0f172a;
+            --primary-navy-hover: #1e293b;
             --success-green: #10b981;
+            --success-green-hover: #059669;
             --danger-red: #ef4444;
             --accent-blue: #3b82f6;
-            --bg-color: #f8fafc;
+            --bg-color: #f1f5f9; /* Slightly darker for more contrast with the card */
             --card-bg: #ffffff;
             --text-main: #1e293b;
             --text-muted: #64748b;
-            --input-border: #e2e8f0;
+            --input-bg: #f8fafc;
+            --input-border: #cbd5e1;
         }
 
+        /* --- DARK MODE THEME --- */
         body.dark-mode {
             --primary-navy: #60a5fa; 
+            --primary-navy-hover: #3b82f6;
             --bg-color: #0f172a;
             --card-bg: #1e293b;
             --text-main: #f1f5f9;
             --text-muted: #94a3b8;
-            --input-border: #334155;
+            --input-bg: #334155;
+            --input-border: #475569;
         }
 
         /* --- BASE STYLES --- */
@@ -48,113 +73,211 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 20px;
+            padding: 20px 20px 100px 20px;
             box-sizing: border-box;
             transition: background-color 0.3s ease;
         }
 
-        /* --- AD SLOTS --- */
+        /* --- ADVERTISEMENT SLOT STYLING --- */
         .ad-slot {
             width: 100%;
             max-width: 728px;
             min-height: 90px;
-            margin: 20px 0;
-            border-radius: 8px;
-            overflow: hidden;
-            background: rgba(0,0,0,0.02);
+            background-color: var(--card-bg);
+            border: 1px solid var(--input-border);
+            color: var(--text-muted);
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            border-radius: 12px;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
         }
 
-        /* --- CALCULATOR CONTAINER --- */
+        /* --- MAIN CONTAINER --- */
         .calculator-container {
             background-color: var(--card-bg);
             width: 100%;
             max-width: 500px;
-            padding: 40px;
-            border-radius: 24px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            padding: 48px;
+            border-radius: 28px;
+            border: 1px solid var(--input-border);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             text-align: center;
             position: relative;
+            transition: background-color 0.3s ease;
         }
 
-        .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-        h2 { color: var(--primary-navy); margin: 0; font-size: 1.5rem; font-weight: 800; }
-        
-        .theme-toggle { background: none; border: none; font-size: 1.2rem; cursor: pointer; padding: 5px; }
+        /* --- HEADER SECTION --- */
+        .header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
 
-        /* --- INPUTS --- */
-        .input-group { margin-bottom: 20px; text-align: left; }
-        .input-label { display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; color: var(--text-muted); text-transform: uppercase; }
-        
-        input, select {
+        h2 {
+            color: var(--primary-navy);
+            margin: 0;
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .verified-badge {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: var(--success-green);
+            background: rgba(16, 185, 129, 0.1);
+            padding: 4px 8px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
+        .header-divider {
+            height: 1px;
+            background: var(--input-border);
+            margin-bottom: 32px;
             width: 100%;
-            background: var(--bg-color);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background 0.2s ease;
+        }
+
+        /* --- INPUT GROUPS --- */
+        .input-group {
+            position: relative;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        input[type="number"], select, input[type="email"] {
+            width: 100%;
+            background-color: var(--input-bg);
             border: 2px solid var(--input-border);
-            border-radius: 12px;
-            padding: 14px;
+            border-radius: 14px;
+            padding: 16px;
             font-size: 1.1rem;
-            font-family: inherit;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
             color: var(--text-main);
             box-sizing: border-box;
-            transition: border-color 0.2s;
+            transition: all 0.25s ease;
         }
-        input:focus { border-color: var(--accent-blue); outline: none; }
+
+        input:focus, select:focus {
+            border-color: var(--accent-blue);
+            background-color: var(--card-bg);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            outline: none;
+        }
 
         /* --- BUTTONS --- */
         button.primary-btn {
-            width: 100%; background-color: var(--primary-navy); color: white; border: none; padding: 18px;
-            border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 10px;
-            transition: transform 0.2s, background 0.2s;
+            width: 100%;
+            background-color: var(--primary-navy);
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 16px;
+            font-size: 1.15rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.2);
         }
-        button.primary-btn:hover { transform: translateY(-1px); }
 
-        .lead-gate { display: none; margin-top: 20px; text-align: left; animation: fadeIn 0.4s ease; }
-        .result-area { display: none; margin-top: 30px; animation: fadeIn 0.4s ease; }
+        button.primary-btn:hover {
+            background-color: var(--primary-navy-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.3);
+        }
 
-        /* --- PROFESSIONAL PDF STYLING (Used during export) --- */
+        /* --- LEAD GATE --- */
+        .lead-gate {
+            display: none;
+            margin-top: 30px;
+            text-align: left;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* --- RESULTS & PDF --- */
+        .result-area {
+            display: none;
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 2px solid var(--input-border);
+            animation: fadeIn 0.4s ease forwards;
+        }
+
         #pdfContent {
-            padding: 40px;
+            padding: 45px;
             background: #ffffff;
             color: #0f172a;
             text-align: left;
             border-radius: 0;
+            line-height: 1.5;
         }
 
-        .pdf-header { border-bottom: 5px solid #0f172a; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
-        .pdf-brand { font-size: 1.6rem; font-weight: 900; letter-spacing: -0.02em; }
-        .pdf-tag { font-size: 0.7rem; font-weight: 800; color: #ef4444; border: 2px solid #ef4444; padding: 3px 7px; border-radius: 4px; text-transform: uppercase; }
+        .pdf-letterhead {
+            border-bottom: 5px solid #0f172a;
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-        .pdf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
-        .pdf-box { background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0; }
-        .pdf-label { font-size: 0.65rem; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 5px; }
-        .pdf-val { font-size: 1.1rem; font-weight: 800; }
+        .firm-name { font-size: 1.7rem; font-weight: 900; letter-spacing: -0.03em; }
+        .pdf-data-box { background: #f8fafc; padding: 20px; border-radius: 14px; border: 1px solid #e2e8f0; margin-bottom: 30px; }
+        .tax-hero-amount { font-size: 3.8rem; font-weight: 900; color: #0f172a; margin: 10px 0 30px 0; letter-spacing: -0.05em; }
 
-        .pdf-total-label { font-size: 0.8rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
-        .pdf-total-amount { font-size: 3.5rem; font-weight: 900; margin: 10px 0 30px 0; color: #0f172a; letter-spacing: -0.04em; }
+        .audit-table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
+        .audit-table th { text-align: left; font-size: 0.75rem; font-weight: 800; color: #64748b; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px; text-transform: uppercase; }
+        .audit-table td { padding: 18px 0; border-bottom: 1px solid #f1f5f9; font-weight: 600; font-size: 1.05rem; }
+        .audit-table .amt { text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 800; }
 
-        .pdf-table { width: 100%; border-collapse: collapse; margin-bottom: 35px; }
-        .pdf-table th { text-align: left; font-size: 0.75rem; font-weight: 800; color: #64748b; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; text-transform: uppercase; }
-        .pdf-table td { padding: 15px 0; border-bottom: 1px solid #f1f5f9; font-weight: 600; font-size: 1rem; }
-        .pdf-table .amt { text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 800; }
-
-        .pdf-insight { background: #0f172a; color: #ffffff; padding: 25px; border-radius: 12px; margin-top: 20px; }
-        .insight-title { color: #10b981; font-weight: 800; font-size: 0.9rem; text-transform: uppercase; margin-bottom: 10px; }
+        .insight-card { background: #0f172a; color: #ffffff; padding: 30px; border-radius: 16px; margin-top: 20px; }
+        .insight-card strong { color: #10b981; }
 
         /* --- UI ELEMENTS --- */
-        .cta-btn { display: block; background: var(--success-green); color: white; text-decoration: none; padding: 20px; border-radius: 12px; font-size: 1.1rem; font-weight: 700; margin: 20px 0; }
-        .pdf-btn { width: 100%; background: transparent; border: 2px solid var(--input-border); padding: 15px; border-radius: 12px; font-weight: 700; cursor: pointer; color: var(--text-main); }
-        .reset-btn { background: none; border: none; color: var(--text-muted); text-decoration: underline; margin-top: 15px; cursor: pointer; }
+        .cta-btn { display: block; background-color: var(--success-green); color: white; text-decoration: none; padding: 22px; border-radius: 16px; font-size: 1.2rem; font-weight: 800; margin: 25px 0 15px 0; transition: background 0.2s; }
+        .pdf-btn { width: 100%; background: transparent; color: var(--text-main); border: 2px solid var(--input-border); padding: 18px; border-radius: 16px; font-weight: 700; cursor: pointer; }
+        .reset-btn { background: none; border: none; color: var(--text-muted); text-decoration: underline; cursor: pointer; margin-top: 20px; font-size: 0.95rem; }
 
         /* --- COMPLIANCE FOOTER --- */
-        footer { margin-top: 40px; text-align: center; font-size: 0.8rem; color: var(--text-muted); padding-bottom: 40px; }
-        footer span { cursor: pointer; text-decoration: underline; margin: 0 10px; }
+        footer { margin-top: 60px; font-size: 0.8rem; color: var(--text-muted); text-align: center; padding-bottom: 40px; }
+        footer span { cursor: pointer; text-decoration: underline; margin: 0 12px; }
 
-        .cookie-banner { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg); padding: 20px; box-shadow: 0 -10px 30px rgba(0,0,0,0.1); z-index: 9999; display: flex; flex-direction: column; align-items: center; transform: translateY(100%); transition: transform 0.5s ease; border-top: 2px solid var(--input-border); }
+        /* --- COOKIE BANNER --- */
+        .cookie-banner { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg); padding: 30px; box-shadow: 0 -15px 50px rgba(0,0,0,0.2); z-index: 9999; display: flex; flex-direction: column; align-items: center; transform: translateY(100%); transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); border-top: 4px solid var(--input-border); }
         .cookie-banner.show { transform: translateY(0); }
+        .btn-accept { background: var(--primary-navy); color: white; border: none; padding: 14px 60px; border-radius: 12px; font-weight: 800; cursor: pointer; margin-top: 25px; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -169,11 +292,13 @@
         <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
 
-    <div class="calculator-container">
+    <div class="calculator-container" id="mainApp">
         <div class="header-flex">
             <h2>LLC STRATEGIST</h2>
-            <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙</button>
+            <button onclick="toggleTheme()" class="theme-toggle" id="themeToggle">🌙</button>
         </div>
+        <div class="verified-badge">✓ Proprietary Tax Audit Engine</div>
+        <div class="header-divider"></div>
 
         <div id="inputSection">
             <div class="input-group">
@@ -181,13 +306,13 @@
                 <input type="number" id="monthlyIncome" placeholder="$ 0.00" oninput="saveData()">
             </div>
             <div class="input-group">
-                <label class="input-label">Business Monthly Expenses</label>
+                <label class="input-label">Operating Expenses</label>
                 <input type="number" id="monthlyExpenses" placeholder="$ 0.00" oninput="saveData()">
             </div>
             <div class="input-group">
                 <label class="input-label">Filing State</label>
                 <select id="userState" onchange="saveData()">
-                    <option value="none">No State Tax (TX, FL, WA, etc.)</option>
+                    <option value="none">No State Income Tax</option>
                     <option value="AL">Alabama</option><option value="AZ">Arizona</option><option value="AR">Arkansas</option>
                     <option value="CA">California</option><option value="CO">Colorado</option><option value="CT">Connecticut</option>
                     <option value="DE">Delaware</option><option value="GA">Georgia</option><option value="HI">Hawaii</option>
@@ -208,52 +333,52 @@
         </div>
 
         <div class="lead-gate" id="leadGate">
-            <h3 style="margin:0 0 10px 0; font-size:1.1rem;">Analysis Ready</h3>
-            <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:20px;">Enter your email to download your professional PDF strategy audit.</p>
-            <input type="email" id="userEmail" placeholder="Email Address" required>
-            <button class="primary-btn" id="unlockBtn" style="margin-top:15px;" onclick="unlockResults()">View Results & Audit</button>
+            <h3 style="margin:0 0 10px 0; font-weight:800;">🔒 Strategy Analysis Ready</h3>
+            <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:25px;">Enter your business email to unlock the itemized tax audit and professional PDF report.</p>
+            <input type="email" id="userEmail" placeholder="ceo@company.com" required>
+            <button class="primary-btn" id="unlockBtn" style="margin-top:20px;" onclick="unlockResults()">Unlock Final Strategy</button>
         </div>
 
         <div class="result-area" id="resultArea">
             <div id="pdfContent">
-                <div class="pdf-header">
-                    <div class="pdf-brand">LLC STRATEGIST</div>
-                    <div class="pdf-tag">PRIVATE REPORT</div>
+                <div class="pdf-letterhead">
+                    <div class="firm-name">TAX AUDIT REPORT</div>
+                    <div style="font-size:0.75rem; font-weight:800; color:#ef4444; border:2.5px solid #ef4444; padding:4px 9px; border-radius:5px; text-transform:uppercase;">Confidential</div>
                 </div>
 
-                <div class="pdf-grid">
-                    <div class="pdf-box">
-                        <div class="pdf-label">Jurisdiction</div>
-                        <div class="pdf-val" id="pdfStateName">N/A</div>
+                <div class="pdf-data-box">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                        <span style="font-size:0.7rem; font-weight:800; color:#64748b; text-transform:uppercase;">Jurisdiction</span>
+                        <span style="font-size:0.7rem; font-weight:800; color:#64748b; text-transform:uppercase;">Audit Date</span>
                     </div>
-                    <div class="pdf-box">
-                        <div class="pdf-label">Generated On</div>
-                        <div class="pdf-val" id="reportDate"></div>
+                    <div style="display:flex; justify-content:space-between;">
+                        <span id="pdfStateName" style="font-weight:800; font-size:1.1rem;">N/A</span>
+                        <span id="reportDate" style="font-weight:800; font-size:1.1rem;"></span>
                     </div>
                 </div>
                 
-                <div class="pdf-total-label">Estimated Annual Tax Burden</div>
-                <div class="pdf-total-amount" id="taxAmount">$0.00</div>
+                <div style="font-size:0.8rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.05em;">Est. Annual Tax Liability</div>
+                <div class="tax-hero-amount" id="taxAmount">$0.00</div>
                 
-                <table class="pdf-table">
-                    <thead><tr><th>Audit Category</th><th style="text-align:right;">Annual Cost</th></tr></thead>
+                <table class="audit-table">
+                    <thead><tr><th>Audit Category</th><th style="text-align:right;">Estimated Value</th></tr></thead>
                     <tbody>
-                        <tr><td>Self-Employment: Social Security (12.4%)</td><td class="amt" id="ssTaxAmt">$0.00</td></tr>
-                        <tr><td>Self-Employment: Medicare (2.9%)</td><td class="amt" id="medTaxAmt">$0.00</td></tr>
-                        <tr><td>Jurisdictional State Income Tax</td><td class="amt" id="stateTaxAmt">$0.00</td></tr>
+                        <tr><td>Social Security (12.4% SE)</td><td class="amt" id="ssTaxAmt">$0.00</td></tr>
+                        <tr><td>Medicare (2.9% SE)</td><td class="amt" id="medTaxAmt">$0.00</td></tr>
+                        <tr><td>State Personal Income Tax</td><td class="amt" id="stateTaxAmt">$0.00</td></tr>
                     </tbody>
                 </table>
 
-                <div class="pdf-insight">
-                    <div class="insight-title">💡 Structural Insight</div>
-                    <div style="font-size:0.85rem; line-height:1.5;" id="savingsMath">
-                        By transitioning to an S-Corp, you could potentially lower your effective tax rate by bypassing a portion of self-employment taxes.
+                <div class="insight-card">
+                    <div style="color:#10b981; font-weight:900; font-size:0.9rem; text-transform:uppercase; margin-bottom:12px;">Strategic Structural insight</div>
+                    <div style="font-size:0.85rem; line-height:1.6;" id="savingsMath">
+                        By transitioning to an S-Corp structure, you could potentially bypass a portion of your self-employment taxes.
                     </div>
                 </div>
             </div>
             
-            <a href="https://www.google.com/search?q=how+to+start+an+llc" class="cta-btn" target="_blank">Start Your LLC Today</a>
-            <button class="pdf-btn" onclick="downloadPDF()">📄 Download PDF Strategy Audit</button>
+            <a href="https://www.google.com/search?q=how+to+start+an+llc" class="cta-btn" target="_blank">Start Your LLC Transition</a>
+            <button class="pdf-btn" onclick="downloadPDF()">📄 Download Audit Strategy (PDF)</button>
             <button class="reset-btn" onclick="startOver()">🔄 Reset Calculator</button>
         </div>
     </div>
@@ -270,13 +395,13 @@
 
     <footer>
         <p>&copy; 2026 LLC Threshold Strategist</p>
-        <span onclick="alert('Privacy Policy: Your email and revenue estimates are used solely for generating this report and providing tax strategy updates. We do not sell data to third parties.')">Privacy Policy</span> | 
-        <span onclick="alert('Terms of Service: This calculator provides estimates for educational purposes only. Always consult with a licensed CPA or tax attorney before making business changes.')">Terms of Service</span>
+        <span onclick="alert('Privacy Policy: Your email and revenue data are used solely for tax estimation and strategy reporting.')">Privacy Policy</span> | 
+        <span onclick="alert('Terms of Service: This calculator provides theoretical estimates. Consult a licensed tax professional for actual filing.')">Terms of Service</span>
     </footer>
 
     <div class="cookie-banner" id="cookieBanner">
-        <p style="font-size:0.85rem; text-align:center;">We use cookies for analysis. By clicking "Accept", you consent to our data processing.</p>
-        <button class="primary-btn" style="padding:10px 40px; width:auto;" onclick="handleCookieConsent('accepted')">Accept</button>
+        <p style="font-size:0.85rem; text-align:center; max-width:800px; line-height:1.5;">We use cookies to maintain your tax estimates and provide personalized audits. By clicking "Accept", you consent to our data processing policies.</p>
+        <button class="primary-btn" style="padding:12px 60px; width:auto; margin-top:15px;" onclick="handleCookieConsent('accepted')">Accept All</button>
     </div>
 
     <script>
@@ -301,23 +426,22 @@
         
         function saveData() { 
             localStorage.setItem("app_income", document.getElementById('monthlyIncome').value); 
-            localStorage.setItem("app_expenses", document.getElementById('monthlyExpenses').value); 
+            localStorage.setItem("app_expenses", document.getElementById('monthlyExpenses').value);
             localStorage.setItem("app_state", document.getElementById('userState').value); 
         }
 
         function triggerLeadGate() {
-            const revenue = parseFloat(document.getElementById('monthlyIncome').value);
-            if (!revenue || revenue <= 0) { alert("Please enter valid revenue."); return; }
+            if (!document.getElementById('monthlyIncome').value) { alert("Revenue input required for analysis."); return; }
             document.getElementById('inputSection').style.display = 'none';
             document.getElementById('leadGate').style.display = 'block';
         }
 
         async function unlockResults() {
             const email = document.getElementById('userEmail').value;
-            if(!email.includes('@')) { alert("Valid email required."); return; }
+            if(!email.includes('@')) { alert("Valid business email required."); return; }
             
             document.getElementById('unlockBtn').disabled = true;
-            document.getElementById('unlockBtn').innerHTML = "Calculating Audit...";
+            document.getElementById('unlockBtn').innerHTML = "Generating Audit...";
             
             const revenue = parseFloat(document.getElementById('monthlyIncome').value);
             const expenses = parseFloat(document.getElementById('monthlyExpenses').value) || 0;
@@ -329,17 +453,16 @@
             const state = Math.max(0, annualProfit * stateTaxRates[stateCode]);
             const total = ss + med + state;
 
-            // DATA TIERING LOGIC
+            // LEAD TIERING Logic
             const formData = new FormData();
             formData.append("Email", email);
-            formData.append("State", stateCode);
-            formData.append("Profit_Annual", annualProfit);
-            formData.append("Tax_Burden", total);
-            formData.append("Tier", total > 5000 ? "High-Value Lead" : "Standard Lead");
+            formData.append("Jurisdiction", stateCode);
+            formData.append("Revenue_Annual", annualProfit);
+            formData.append("Tier", total > 5000 ? "HIGH-VALUE AUDIT" : "STANDARD AUDIT");
 
             try { await fetch("https://formspree.io/f/mreowvpj", { method: "POST", body: formData, headers: { 'Accept': 'application/json' } }); } catch (e) {}
 
-            confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+            confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 }, colors: ['#0f172a', '#10b981', '#3b82f6'] });
             document.getElementById('leadGate').style.display = 'none';
             document.getElementById('resultArea').style.display = 'block';
 
@@ -347,11 +470,10 @@
             document.getElementById('ssTaxAmt').innerHTML = formatter.format(ss);
             document.getElementById('medTaxAmt').innerHTML = formatter.format(med);
             document.getElementById('stateTaxAmt').innerHTML = formatter.format(state);
-            document.getElementById('pdfStateName').innerHTML = stateCode === 'none' ? 'No State Tax' : stateCode;
+            document.getElementById('pdfStateName').innerHTML = stateCode;
             
-            // DYNAMIC SAVINGS AUDIT
-            const potentialSavings = (ss + med) * 0.6; // Assuming 60% savings on SE tax via S-Corp distributions
-            document.getElementById('savingsMath').innerHTML = `By transitioning to an LLC/S-Corp structure, you could potentially save <strong>${formatter.format(potentialSavings)}</strong> annually in self-employment taxes.`;
+            const potentialSavings = (ss + med) * 0.6;
+            document.getElementById('savingsMath').innerHTML = `By transitioning your structure to an LLC with S-Election, you could potentially save <strong>${formatter.format(potentialSavings)}</strong> annually in Medicare and Social Security taxes based on these profit levels.`;
         }
 
         function startOver() { document.getElementById('resultArea').style.display = 'none'; document.getElementById('inputSection').style.display = 'block'; document.getElementById('unlockBtn').disabled = false; }
@@ -360,7 +482,7 @@
             const element = document.getElementById('pdfContent');
             const opt = { 
                 margin: 0.5, 
-                filename: 'LLC_Tax_Strategy_Audit.pdf', 
+                filename: 'Tax_Strategy_Audit.pdf', 
                 html2canvas: { scale: 3, useCORS: true }, 
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } 
             };
