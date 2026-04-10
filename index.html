@@ -20,6 +20,7 @@
             --primary-navy: #0f172a;
             --primary-navy-hover: #1e293b;
             --success-green: #10b981;
+            --success-green-hover: #059669;
             --danger-red: #ef4444;
             --accent-blue: #3b82f6;
             --bg-color: #f1f5f9; 
@@ -107,11 +108,19 @@
         .track-label { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px; }
         .track-val { font-size: 1.3rem; font-weight: 800; color: var(--primary-navy); }
 
-        /* --- THE PDF DESIGN --- */
-        #pdfContent { padding: 45px; background: #ffffff; color: #0f172a; text-align: left; line-height: 1.5; }
+        /* --- THE PDF DESIGN (CRITICAL FIX: Ensure background is white for capture) --- */
+        #pdfContent { 
+            padding: 45px; 
+            background: #ffffff !important; 
+            color: #0f172a !important; 
+            text-align: left; 
+            line-height: 1.5; 
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+        }
         .pdf-header { border-bottom: 5px solid #0f172a; padding-bottom: 20px; margin-bottom: 40px; display: flex; justify-content: space-between; align-items: center; }
         .audit-table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
-        .audit-table td { padding: 18px 0; border-bottom: 1px solid #f1f5f9; font-weight: 600; }
+        .audit-table td { padding: 18px 0; border-bottom: 1px solid #f1f5f9; font-weight: 600; color: #0f172a !important; }
         .audit-table .amt { text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 800; }
 
         .cta-btn { display: block; background: var(--success-green); color: white; text-decoration: none; padding: 22px; border-radius: 16px; font-size: 1.2rem; font-weight: 800; margin: 25px 0; }
@@ -123,7 +132,12 @@
 <body>
 
     <div class="ad-slot">
-        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1553305917920278" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-1553305917920278"
+             data-ad-slot="auto"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
         <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
 
@@ -182,15 +196,15 @@
 
         <div class="result-area" id="resultArea">
             <div id="pdfContent">
-                <div class="pdf-header"><div style="font-weight:900; font-size:1.5rem;">STRATEGY AUDIT</div><div style="font-size:0.75rem; font-weight:800; color:#ef4444; border:2px solid #ef4444; padding:4px 9px; border-radius:5px;">PRIVATE</div></div>
+                <div class="pdf-header"><div style="font-weight:900; font-size:1.5rem; color:#0f172a !important;">STRATEGY AUDIT</div><div style="font-size:0.75rem; font-weight:800; color:#ef4444; border:2px solid #ef4444; padding:4px 9px; border-radius:5px;">PRIVATE</div></div>
                 
                 <div class="comparison-grid">
-                    <div class="track-box"><div class="track-label">Sole Prop (Current)</div><div id="soleTax" class="track-val" style="color:#ef4444;">$0</div></div>
-                    <div class="track-box highlight"><div class="track-label">LLC S-Corp (Optimized)</div><div id="scorpTax" class="track-val" style="color:#10b981;">$0</div></div>
+                    <div class="track-box"><div class="track-label">Sole Prop (Current)</div><div id="soleTax" class="track-val" style="color:#ef4444 !important;">$0</div></div>
+                    <div class="track-box highlight"><div class="track-label">LLC S-Corp (Optimized)</div><div id="scorpTax" class="track-val" style="color:#10b981 !important;">$0</div></div>
                 </div>
 
                 <div style="font-size:0.7rem; font-weight:800; color:#64748b; text-transform:uppercase;">Estimated Annual Savings</div>
-                <div style="font-size:3.5rem; font-weight:900; margin:5px 0 30px 0;" id="totalSavings">$0.00</div>
+                <div style="font-size:3.5rem; font-weight:900; margin:5px 0 30px 0; color:#0f172a !important;" id="totalSavings">$0.00</div>
                 
                 <table class="audit-table">
                     <thead><tr style="text-align:left; font-size:0.7rem; color:#64748b; border-bottom:2px solid #e2e8f0;"><th style="padding-bottom:10px;">Audit Item</th><th style="text-align:right;">Estimated Liability</th></tr></thead>
@@ -198,21 +212,26 @@
                         </tbody>
                 </table>
 
-                <div style="background:#0f172a; color:#ffffff; padding:25px; border-radius:16px;">
-                    <div style="color:#10b981; font-weight:900; font-size:0.9rem; margin-bottom:10px;">STRATEGIC INSIGHT</div>
+                <div style="background:#0f172a !important; color:#ffffff !important; padding:25px; border-radius:16px;">
+                    <div style="color:#10b981 !important; font-weight:900; font-size:0.9rem; margin-bottom:10px;">STRATEGIC INSIGHT</div>
                     <div style="font-size:0.85rem; line-height:1.6;" id="insightText">Your revenue has officially crossed the S-Corp efficient threshold.</div>
                 </div>
             </div>
             
             <a href="https://www.google.com/search?q=how+to+start+an+llc" class="cta-btn" target="_blank">Start LLC Transition</a>
-            <button class="secondary-btn" onclick="downloadPDF()">📄 Download Strategy PDF</button>
+            <button class="secondary-btn" id="pdfBtnTrigger" onclick="downloadPDF()">📄 Download Strategy PDF</button>
             <button class="secondary-btn" onclick="shareSite()">🔗 Share Strategy with Partner</button>
             <button class="reset-btn" onclick="location.reload()" style="background:none; border:none; text-decoration:underline; cursor:pointer; color:var(--text-muted); margin-top:15px;">🔄 New Calculation</button>
         </div>
     </div>
 
     <div class="ad-slot">
-        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1553305917920278" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-1553305917920278"
+             data-ad-slot="auto"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
         <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
 
@@ -264,22 +283,24 @@
             // MATH Logic
             const ss = profit * 0.124; const med = profit * 0.029; const state = profit * stateRates[stateCode];
             const totalSole = ss + med + state;
-            const totalScorp = (ss + med) * 0.4 + state; // Simplified Scorp Distribution Savings
+            const totalScorp = (ss + med) * 0.4 + state; 
             const savings = totalSole - totalScorp;
 
             const formData = new FormData();
             formData.append("Email", email); formData.append("Status", filingStatus); formData.append("Revenue", profit); formData.append("Savings", savings);
+            formData.append("Tier", savings > 3500 ? "HIGH-VALUE" : "STANDARD");
 
             try { await fetch("https://formspree.io/f/mreowvpj", { method: "POST", body: formData, headers: { 'Accept': 'application/json' } }); } catch (e) {}
 
             confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
-            document.getElementById('leadGate').style.display = 'none'; document.getElementById('resultArea').style.display = 'block';
+            document.getElementById('leadGate').style.display = 'none'; 
+            document.getElementById('resultArea').style.display = 'block';
             
             document.getElementById('soleTax').innerText = formatter.format(totalSole);
             document.getElementById('scorpTax').innerText = formatter.format(totalScorp);
             document.getElementById('totalSavings').innerText = formatter.format(savings);
             document.getElementById('auditRows').innerHTML = `<tr><td>Federal SS (12.4%)</td><td class="amt">${formatter.format(ss)}</td></tr><tr><td>Federal Medicare (2.9%)</td><td class="amt">${formatter.format(med)}</td></tr><tr><td>State Personal Tax</td><td class="amt">${formatter.format(state)}</td></tr>`;
-            document.getElementById('insightText').innerHTML = `At ${formatter.format(profit)} annual profit, you are overpaying <strong>${formatter.format(savings)}</strong> in self-employment taxes. Transitioning to an S-Corp structure is highly recommended.`;
+            document.getElementById('insightText').innerHTML = `At ${formatter.format(profit)} annual profit, you are currently projected to incur <strong>${formatter.format(totalSole)}</strong> in taxes. By structural transition, you could save <strong>${formatter.format(savings)}</strong> annually.`;
         }
 
         function shareSite() {
@@ -287,10 +308,32 @@
             window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
         }
 
+        // --- PDF ENGINE FIX: Ensuring capture stability ---
         function downloadPDF() {
             const element = document.getElementById('pdfContent');
-            const opt = { margin: 0.5, filename: 'Tax_Strategy.pdf', html2canvas: { scale: 3 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } };
-            html2pdf().set(opt).from(element).save();
+            const btn = document.getElementById('pdfBtnTrigger');
+            btn.innerHTML = "⏳ Processing...";
+            btn.disabled = true;
+
+            const opt = { 
+                margin: 0.5, 
+                filename: 'Tax_Strategy_Audit.pdf', 
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2, 
+                    useCORS: true, 
+                    logging: false,
+                    letterRendering: true,
+                    scrollY: 0,
+                    windowWidth: document.documentElement.offsetWidth
+                }, 
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } 
+            };
+
+            html2pdf().set(opt).from(element).toPdf().get('pdf').save().then(() => {
+                btn.innerHTML = "📄 Download Strategy PDF";
+                btn.disabled = false;
+            });
         }
     </script>
 </body>
