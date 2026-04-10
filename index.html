@@ -4,15 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>The LLC Threshold Calculator | Save on Taxes</title>
-    <meta name="description" content="Calculate your self-employment tax, state tax, and get a free customized PDF strategy report.">
+    <title>LLC Threshold Calculator | Save $5,000+ on Self-Employment Taxes</title>
+    <meta name="description" content="Calculate your exact self-employment tax burden and discover the LLC threshold to save thousands. Get a free, itemized PDF tax strategy report instantly.">
+    <meta name="keywords" content="LLC tax calculator, self employment tax, S-Corp threshold, tax savings, business tax strategist">
+    
+    <meta property="og:title" content="LLC Tax Savings Calculator">
+    <meta property="og:description" content="Stop overpaying on taxes. Calculate your LLC threshold in 60 seconds.">
+    <meta property="og:type" content="website">
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FinancialCalculator",
+      "name": "LLC Threshold & Tax Strategist",
+      "description": "Enterprise-grade tool for calculating self-employment and state tax burdens.",
+      "category": "Tax Tool",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1553305917920278" crossorigin="anonymous"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         /* --- CSS THEME VARIABLES --- */
@@ -58,7 +78,7 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* --- ADVERTISEMENT SLOT STYLING --- */
+        /* --- ADVERTISEMENT SLOTS --- */
         .ad-slot {
             width: 100%;
             max-width: 728px;
@@ -81,25 +101,22 @@
         .calculator-container {
             background-color: var(--card-bg);
             width: 100%;
-            max-width: 500px;
+            max-width: 550px;
             padding: 48px 40px;
             border-radius: 24px;
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
             text-align: center;
             position: relative;
             overflow: hidden;
             transition: background-color 0.3s ease;
-            margin: 20px 0;
+            margin-bottom: 20px;
         }
 
         .calculator-container::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 6px;
-            background: linear-gradient(90deg, #3b82f6, var(--success-green));
+            top: 0; left: 0; right: 0; height: 6px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--success-green));
         }
 
         /* --- HEADER SECTION --- */
@@ -107,13 +124,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
         h2 {
             color: var(--primary-navy);
             margin: 0;
-            font-size: 1.75rem;
+            font-size: 1.85rem;
             font-weight: 700;
         }
 
@@ -125,21 +142,17 @@
             padding: 8px;
             border-radius: 50%;
             transition: background 0.2s ease;
-            line-height: 1;
         }
 
-        .theme-toggle:hover {
-            background: rgba(100, 116, 139, 0.1);
-        }
-
+        /* --- INPUTS & LABELS --- */
         p.subtitle {
             font-size: 1rem;
             color: var(--text-muted);
             margin-bottom: 32px;
             text-align: left;
+            line-height: 1.5;
         }
 
-        /* --- INPUT GROUPS --- */
         .input-group {
             position: relative;
             margin-bottom: 24px;
@@ -148,7 +161,7 @@
 
         .input-label {
             display: block;
-            font-size: 0.875rem;
+            font-size: 0.9rem;
             font-weight: 600;
             color: var(--primary-navy);
             margin-bottom: 10px;
@@ -159,17 +172,16 @@
             left: 16px;
             bottom: 14px;
             color: var(--text-muted);
-            font-weight: 500;
+            font-weight: 600;
             font-size: 1.1rem;
         }
 
-        input[type="number"], 
-        select, 
-        input[type="email"] {
+        input[type="number"], select, input[type="email"] {
             width: 100%;
             background-color: var(--input-bg);
-            border: 1px solid var(--input-border);
+            border: 2px solid var(--input-border);
             border-radius: 12px;
+            padding: 14px 16px;
             font-size: 1.1rem;
             font-weight: 500;
             font-family: 'Inter', sans-serif;
@@ -178,334 +190,141 @@
             transition: all 0.2s ease;
         }
 
-        input[type="number"] {
-            padding: 14px 16px 14px 40px;
-        }
-
-        select, 
-        input[type="email"] {
-            padding: 14px 16px;
-            cursor: pointer;
-        }
-
-        input:focus, 
-        select:focus {
-            outline: none;
-            border-color: var(--accent-blue);
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
-        }
-
-        /* Hide Spin Buttons */
+        input[type="number"] { padding-left: 36px; }
         input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+        input:focus, select:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+            outline: none;
         }
 
-        /* --- CONSENT CHECKBOX --- */
-        .consent-group {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            margin-top: 20px;
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .consent-group input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            margin-top: 3px;
-            cursor: pointer;
-        }
-
-        .consent-label {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-
-        .consent-label a {
-            color: var(--accent-blue);
-            text-decoration: underline;
-        }
-
-        /* --- BUTTONS --- */
-        button.primary-btn {
-            width: 100%;
-            background-color: var(--primary-navy);
-            color: white;
-            border: none;
-            padding: 18px;
-            border-radius: 14px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin-top: 10px;
-        }
-
-        button.primary-btn:hover {
-            background-color: var(--primary-navy-hover);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        button.primary-btn:disabled {
-            background-color: var(--text-muted);
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* --- LEAD GATE --- */
+        /* --- LEAD CAPTURE --- */
         .lead-gate {
             display: none;
             background-color: var(--input-bg);
-            border: 1px solid var(--input-border);
+            border: 2px solid var(--input-border);
             border-radius: 16px;
-            padding: 28px;
+            padding: 32px;
             margin-top: 24px;
             animation: fadeIn 0.5s ease forwards;
             text-align: left;
         }
 
-        .lead-gate h3 {
-            margin-top: 0;
-            font-size: 1.25rem;
-            color: var(--text-main);
-            margin-bottom: 12px;
+        .consent-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin: 20px 0;
         }
 
-        .lead-gate p {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            margin-bottom: 20px;
-        }
+        .consent-group input { width: 20px; height: 20px; cursor: pointer; }
+        .consent-label { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
 
-        /* --- RESULTS AREA --- */
+        /* --- RESULTS & PDF BRANDING --- */
         .result-area {
             display: none;
             margin-top: 32px;
             padding-top: 32px;
-            border-top: 1px solid var(--input-border);
+            border-top: 2px solid var(--input-border);
             animation: fadeIn 0.5s ease forwards;
         }
 
         #pdfContent {
-            padding: 24px;
-            background: var(--card-bg);
+            padding: 30px;
+            background: #ffffff;
             border-radius: 16px;
-            margin-bottom: 24px;
-        }
-
-        .tax-estimate-label {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-        }
-
-        .tax-amount {
-            font-weight: 700;
-            color: var(--primary-navy);
-            font-size: 2.75rem;
-            margin: 0 0 16px 0;
-        }
-
-        /* --- TAX LEDGER TABLE --- */
-        .tax-ledger {
-            width: 100%;
+            color: #0f172a; 
             text-align: left;
-            margin-bottom: 28px;
-            font-size: 0.95rem;
-            border-collapse: collapse;
         }
 
-        .tax-ledger th, 
-        .tax-ledger td {
-            padding: 12px 0;
-            border-bottom: 1px solid var(--input-border);
-            color: var(--text-main);
-        }
-
-        .tax-ledger th {
-            font-weight: 600;
-            color: var(--text-muted);
-        }
-
-        .tax-ledger .ledger-amount {
-            text-align: right;
-            font-family: monospace;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        /* --- VISUAL BARS --- */
-        .visual-bar-container {
-            width: 100%;
-            height: 28px;
-            background-color: var(--input-border);
-            border-radius: 14px;
-            overflow: hidden;
-            display: flex;
-            margin-bottom: 16px;
-        }
-
-        .take-home-bar {
-            height: 100%;
-            background-color: var(--primary-navy);
-            width: 0%;
-            transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .tax-bar {
-            height: 100%;
-            background-color: var(--danger-red);
-            width: 0%;
-            transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .legend {
+        .pdf-header {
+            border-bottom: 3px solid #0f172a;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
             display: flex;
             justify-content: space-between;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 24px;
-            color: var(--text-main);
+            align-items: flex-end;
         }
 
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .pdf-title { font-size: 1.5rem; font-weight: 800; text-transform: uppercase; color: #0f172a; }
+
+        .tax-amount {
+            font-weight: 800;
+            color: #0f172a;
+            font-size: 3rem;
+            margin: 10px 0 25px 0;
         }
 
-        .dot-navy { height: 12px; width: 12px; background-color: var(--primary-navy); border-radius: 50%; }
-        .dot-red { height: 12px; width: 12px; background-color: var(--danger-red); border-radius: 50%; }
-
-        /* --- FINAL ACTION BUTTONS --- */
-        .cta-btn {
-            display: inline-block;
-            background-color: var(--success-green);
-            color: white;
-            text-decoration: none;
-            padding: 18px 24px;
-            border-radius: 14px;
-            font-size: 1.15rem;
-            font-weight: 700;
+        .tax-ledger {
             width: 100%;
-            box-sizing: border-box;
-            margin-bottom: 16px;
-            transition: background 0.2s ease;
+            border-collapse: collapse;
+            margin-bottom: 30px;
         }
 
-        .cta-btn:hover {
-            background-color: var(--success-green-hover);
+        .tax-ledger th { text-align: left; padding: 12px 0; border-bottom: 2px solid #e2e8f0; color: #64748b; text-transform: uppercase; font-size: 0.75rem; }
+        .tax-ledger td { padding: 15px 0; border-bottom: 1px solid #f1f5f9; font-weight: 500; }
+        .ledger-amount { text-align: right; font-weight: 700; font-family: monospace; font-size: 1.1rem; }
+
+        .visual-bar-container {
+            width: 100%; height: 30px; background-color: #e2e8f0; border-radius: 15px; overflow: hidden; display: flex; margin-bottom: 15px;
+        }
+
+        .take-home-bar { height: 100%; background-color: #0f172a; width: 0%; transition: width 1.5s ease; }
+        .tax-bar { height: 100%; background-color: #ef4444; width: 0%; transition: width 1.5s ease; }
+
+        .expert-note {
+            background-color: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            border-left: 4px solid #10b981;
+            margin-top: 20px;
+        }
+
+        /* --- BUTTONS --- */
+        button.primary-btn {
+            width: 100%; background-color: var(--primary-navy); color: white; border: none; padding: 18px;
+            border-radius: 14px; font-size: 1.15rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease; margin-top: 10px;
+        }
+
+        button.primary-btn:hover { background-color: var(--primary-navy-hover); transform: translateY(-1px); }
+
+        .cta-btn {
+            display: block; background-color: var(--success-green); color: white; text-decoration: none;
+            padding: 20px; border-radius: 14px; font-size: 1.2rem; font-weight: 700; margin: 20px 0 12px 0; transition: background 0.2s;
         }
 
         .pdf-btn {
-            background-color: transparent;
-            color: var(--text-main);
-            border: 2px solid var(--input-border);
-            padding: 16px;
-            border-radius: 14px;
-            font-weight: 600;
-            width: 100%;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin-bottom: 20px;
+            width: 100%; background-color: transparent; color: var(--text-main); border: 2px solid var(--input-border);
+            padding: 16px; border-radius: 14px; font-weight: 600; cursor: pointer; margin-bottom: 15px;
         }
 
-        .pdf-btn:hover {
-            background-color: var(--input-bg);
-            border-color: var(--text-muted);
+        .reset-btn { background: none; border: none; color: var(--text-muted); text-decoration: underline; cursor: pointer; font-size: 0.9rem; }
+
+        /* --- SEO AUTHORITY CONTENT --- */
+        .seo-content {
+            max-width: 800px; margin-top: 60px; text-align: left; line-height: 1.7; color: var(--text-muted);
+            border-top: 1px solid var(--input-border); padding-top: 40px;
         }
 
-        .reset-btn {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            text-decoration: underline;
-            margin-top: 10px;
-            cursor: pointer;
-            transition: color 0.2s ease;
-        }
-
-        .reset-btn:hover {
-            color: var(--primary-navy);
-        }
-
-        /* --- COOKIE CONSENT BANNER --- */
+        /* --- COOKIE BANNER --- */
         .cookie-banner {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: var(--card-bg);
-            color: var(--text-main);
-            padding: 24px;
-            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.15);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            border-top: 1px solid var(--input-border);
-            transform: translateY(100%);
-            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg);
+            padding: 25px; box-shadow: 0 -10px 40px rgba(0,0,0,0.1); z-index: 9999;
+            display: flex; flex-direction: column; align-items: center;
+            transform: translateY(100%); transition: transform 0.5s ease;
+            border-top: 2px solid var(--input-border);
         }
+        .cookie-banner.show { transform: translateY(0); }
+        .btn-accept { background: var(--primary-navy); color: white; border: none; padding: 12px 40px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 15px; }
 
-        .cookie-banner.show {
-            transform: translateY(0);
-        }
+        footer { margin-top: 60px; font-size: 0.85rem; color: var(--text-muted); text-align: center; padding-bottom: 40px; }
+        footer a { color: var(--accent-blue); margin: 0 10px; text-decoration: none; }
 
-        .cookie-text {
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-            max-width: 850px;
-            text-align: center;
-            line-height: 1.6;
-        }
-
-        .btn-accept {
-            background-color: var(--primary-navy);
-            color: white;
-            border: none;
-            padding: 12px 32px;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        /* --- FOOTER --- */
-        footer {
-            margin-top: 60px;
-            padding-bottom: 40px;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            text-align: center;
-        }
-
-        footer a {
-            color: var(--accent-blue);
-            text-decoration: none;
-            margin: 0 12px;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* --- ANIMATIONS --- */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -517,107 +336,79 @@
              data-ad-slot="auto"
              data-ad-format="auto"
              data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
 
     <div class="calculator-container">
-        
         <div class="header-flex">
             <h2>LLC Tax Strategist</h2>
             <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙</button>
         </div>
-        <p class="subtitle">Enterprise-grade self-employment tax analysis.</p>
+        <p class="subtitle">Calculate your Federal SE and State tax burden instantly to determine your LLC threshold.</p>
 
         <div id="inputSection">
             <div class="input-group">
-                <label class="input-label" for="monthlyIncome">Estimated Monthly Revenue</label>
+                <label class="input-label">Estimated Monthly Revenue</label>
                 <span class="currency-symbol">$</span>
                 <input type="number" id="monthlyIncome" placeholder="0.00" oninput="saveData()" min="0">
             </div>
-
             <div class="input-group">
-                <label class="input-label" for="monthlyExpenses">Estimated Monthly Expenses</label>
+                <label class="input-label">Estimated Monthly Expenses</label>
                 <span class="currency-symbol">$</span>
                 <input type="number" id="monthlyExpenses" placeholder="0.00" oninput="saveData()" min="0">
             </div>
-
             <div class="input-group">
-                <label class="input-label" for="userState">Select Your Business State</label>
+                <label class="input-label">Select Business State</label>
                 <select id="userState" onchange="saveData()">
-                    <option value="none">No State Income Tax (AK, FL, NV, NH, SD, TN, TX, WA, WY)</option>
-                    <option value="AL">Alabama</option><option value="AZ">Arizona</option>
-                    <option value="AR">Arkansas</option><option value="CA">California</option>
-                    <option value="CO">Colorado</option><option value="CT">Connecticut</option>
-                    <option value="DE">Delaware</option><option value="GA">Georgia</option>
-                    <option value="HI">Hawaii</option><option value="ID">Idaho</option>
-                    <option value="IL">Illinois</option><option value="IN">Indiana</option>
-                    <option value="IA">Iowa</option><option value="KS">Kansas</option>
-                    <option value="KY">Kentucky</option><option value="LA">Louisiana</option>
-                    <option value="ME">Maine</option><option value="MD">Maryland</option>
-                    <option value="MA">Massachusetts</option><option value="MI">Michigan</option>
-                    <option value="MN">Minnesota</option><option value="MS">Mississippi</option>
-                    <option value="MO">Missouri</option><option value="MT">Montana</option>
-                    <option value="NE">Nebraska</option><option value="NJ">New Jersey</option>
-                    <option value="NM">New Mexico</option><option value="NY">New York</option>
-                    <option value="NC">North Carolina</option><option value="ND">North Dakota</option>
-                    <option value="OH">Ohio</option><option value="OK">Oklahoma</option>
-                    <option value="OR">Oregon</option><option value="PA">Pennsylvania</option>
-                    <option value="RI">Rhode Island</option><option value="SC">South Carolina</option>
-                    <option value="UT">Utah</option><option value="VT">Vermont</option>
-                    <option value="VA">Virginia</option><option value="WV">West Virginia</option>
-                    <option value="WI">Wisconsin</option>
+                    <option value="none">No State Income Tax (TX, FL, WA, etc.)</option>
+                    <option value="AL">Alabama</option><option value="AZ">Arizona</option><option value="AR">Arkansas</option>
+                    <option value="CA">California</option><option value="CO">Colorado</option><option value="CT">Connecticut</option>
+                    <option value="DE">Delaware</option><option value="GA">Georgia</option><option value="HI">Hawaii</option>
+                    <option value="ID">Idaho</option><option value="IL">Illinois</option><option value="IN">Indiana</option>
+                    <option value="IA">Iowa</option><option value="KS">Kansas</option><option value="KY">Kentucky</option>
+                    <option value="LA">Louisiana</option><option value="ME">Maine</option><option value="MD">Maryland</option>
+                    <option value="MA">Massachusetts</option><option value="MI">Michigan</option><option value="MN">Minnesota</option>
+                    <option value="MS">Mississippi</option><option value="MO">Missouri</option><option value="MT">Montana</option>
+                    <option value="NE">Nebraska</option><option value="NJ">New Jersey</option><option value="NM">New Mexico</option>
+                    <option value="NY">New York</option><option value="NC">North Carolina</option><option value="ND">North Dakota</option>
+                    <option value="OH">Ohio</option><option value="OK">Oklahoma</option><option value="OR">Oregon</option>
+                    <option value="PA">Pennsylvania</option><option value="RI">Rhode Island</option><option value="SC">South Carolina</option>
+                    <option value="UT">Utah</option><option value="VT">Vermont</option><option value="VA">Virginia</option>
+                    <option value="WV">West Virginia</option><option value="WI">Wisconsin</option>
                 </select>
             </div>
-
-            <button class="primary-btn" id="initCalcBtn" onclick="triggerLeadGate()">Analyze My Strategy</button>
+            <button class="primary-btn" onclick="triggerLeadGate()">Analyze My Strategy</button>
         </div>
 
         <div class="lead-gate" id="leadGate">
-            <h3>🔒 Your Strategy is Ready</h3>
-            <p>Enter your email to unlock your exact visual tax breakdown and strategy report.</p>
-            
-            <div class="input-group">
-                <input type="email" id="userEmail" placeholder="your@email.com" required>
-            </div>
-            
+            <h3>🔒 Your Strategy Report is Ready</h3>
+            <p>Enter your professional email to unlock your itemized tax ledger and premium strategy PDF.</p>
+            <input type="email" id="userEmail" placeholder="name@company.com" required>
             <div class="consent-group">
                 <input type="checkbox" id="dataConsent">
-                <label for="dataConsent" class="consent-label">
-                    I agree to the <a href="#">Privacy Policy</a> and consent to my information being used to provide relevant business tax offers.
-                </label>
+                <label for="dataConsent" class="consent-label">I agree to the Privacy Policy and consent to receiving business tax strategy updates.</label>
             </div>
-
-            <button class="primary-btn" id="unlockBtn" onclick="unlockResults()">Unlock My Results</button>
+            <button class="primary-btn" id="unlockBtn" onclick="unlockResults()">Unlock Strategy Report</button>
         </div>
 
         <div class="result-area" id="resultArea">
-            
             <div id="pdfContent">
-                <div class="tax-estimate-label">Total Estimated Annual Tax</div>
+                <div class="pdf-header">
+                    <div class="pdf-title">Tax Strategy Report</div>
+                    <div style="font-size: 0.85rem; color: #64748b;" id="reportDate"></div>
+                </div>
+                
+                <div style="font-size: 0.85rem; color: #64748b; text-transform: uppercase; font-weight: 700;">Total Estimated Annual Tax Burden</div>
                 <div class="tax-amount" id="taxAmount">$0.00</div>
                 
                 <table class="tax-ledger">
                     <thead>
-                        <tr>
-                            <th>Tax Category</th>
-                            <th class="ledger-amount">Estimated Cost</th>
-                        </tr>
+                        <tr><th>Description</th><th class="ledger-amount">Annual Cost</th></tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Social Security (12.4%)</td>
-                            <td class="ledger-amount" id="ssTaxAmt">$0.00</td>
-                        </tr>
-                        <tr>
-                            <td>Medicare (2.9%)</td>
-                            <td class="ledger-amount" id="medTaxAmt">$0.00</td>
-                        </tr>
-                        <tr>
-                            <td>State Income Tax</td>
-                            <td class="ledger-amount" id="stateTaxAmt">$0.00</td>
-                        </tr>
+                        <tr><td>Self-Employment: Social Security (12.4%)</td><td class="ledger-amount" id="ssTaxAmt">$0.00</td></tr>
+                        <tr><td>Self-Employment: Medicare (2.9%)</td><td class="ledger-amount" id="medTaxAmt">$0.00</td></tr>
+                        <tr><td>Estimated State Income Tax</td><td class="ledger-amount" id="stateTaxAmt">$0.00</td></tr>
                     </tbody>
                 </table>
                 
@@ -625,17 +416,19 @@
                     <div class="take-home-bar" id="takeHomeBar"></div>
                     <div class="tax-bar" id="taxBar"></div>
                 </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; margin-bottom: 30px;">
+                    <span>ANNUAL TAKE-HOME</span>
+                    <span>TOTAL TAX BURDEN</span>
+                </div>
 
-                <div class="legend">
-                    <div class="legend-item"><span class="dot-navy"></span> Annual Take-Home</div>
-                    <div class="legend-item"><span class="dot-red"></span> Total Tax Burden</div>
+                <div class="expert-note">
+                    <strong>💡 Expert Observation:</strong> Based on these figures, if your "Total Tax Burden" exceeds $5,000, you have likely reached the <strong>LLC/S-Corp Threshold</strong>. Transitioning your structure could potentially save you thousands in Medicare and Social Security costs.
                 </div>
             </div>
             
-            <a href="https://www.google.com/search?q=how+to+start+an+llc" class="cta-btn" id="ctaBtn" target="_blank" rel="noopener noreferrer">Start Your LLC Today</a>
-            
-            <button class="pdf-btn" onclick="downloadPDF()">📄 Download PDF Strategy Report</button>
-            <button class="reset-btn" onclick="startOver()">🔄 Recalculate New Numbers</button>
+            <a href="https://www.google.com/search?q=how+to+start+an+llc" class="cta-btn" target="_blank">Start Your LLC Transition Today</a>
+            <button class="pdf-btn" onclick="downloadPDF()">📄 Download Full Strategy PDF</button>
+            <button class="reset-btn" onclick="startOver()">🔄 Recalculate Numbers</button>
         </div>
     </div>
 
@@ -646,54 +439,38 @@
              data-ad-slot="auto"
              data-ad-format="auto"
              data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <div class="seo-content">
+        <h2 style="color: var(--primary-navy);">Why Use an LLC Threshold Calculator?</h2>
+        <p>Understanding the "LLC Threshold" is crucial for small business owners. As a sole proprietor, you are taxed on 100% of your business profit at a rate of 15.3% for self-employment taxes. This calculator helps you see the point where forming an LLC or S-Corp becomes a financially superior choice.</p>
+        <h3 style="color: var(--primary-navy);">When should you transition?</h3>
+        <p>Most CPAs suggest that once your net business profit reaches the $40,000 to $50,000 range, the tax savings of an S-Election start to outweigh the additional administrative and payroll costs. Use this tool to visualize your specific tax burden across all 50 states.</p>
     </div>
 
     <div class="cookie-banner" id="cookieBanner">
-        <div class="cookie-text">
-            We use cookies to personalize content and ads, to provide social media features and to analyze our traffic. We also share information about your use of our site with our social media, advertising and analytics partners. By clicking "Accept All", you consent to our data processing.
-        </div>
+        <div style="font-size: 0.9rem; text-align: center; max-width: 800px;">We use essential cookies to analyze traffic and provide personalized business tax offers. By clicking "Accept All", you consent to our data processing.</div>
         <button class="btn-accept" onclick="handleCookieConsent('accepted')">Accept All Cookies</button>
     </div>
 
     <footer>
-        <p>&copy; 2026 The LLC Threshold Calculator</p>
-        <p>
-            <a href="#">Privacy Policy</a> | 
-            <a href="#">Terms of Service</a> | 
-            <a href="#">Cookie Policy</a>
-        </p>
+        <p>&copy; 2026 LLC Threshold Strategist</p>
+        <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | <a href="#">Cookie Policy</a></p>
     </footer>
 
     <script>
-        const formatter = new Intl.NumberFormat('en-US', { 
-            style: 'currency', 
-            currency: 'USD',
-            minimumFractionDigits: 2
-        });
+        const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+        const stateTaxRates = { "none": 0.0, "AL": 0.05, "AZ": 0.025, "AR": 0.047, "CA": 0.08, "CO": 0.044, "CT": 0.06, "DE": 0.066, "GA": 0.0549, "HI": 0.07, "ID": 0.058, "IL": 0.0495, "IN": 0.0315, "IA": 0.057, "KS": 0.057, "KY": 0.045, "LA": 0.0425, "ME": 0.0715, "MD": 0.0575, "MA": 0.05, "MI": 0.0425, "MN": 0.068, "MS": 0.04, "MO": 0.0495, "MT": 0.059, "NE": 0.0584, "NJ": 0.06, "NM": 0.049, "NY": 0.06, "NC": 0.045, "ND": 0.025, "OH": 0.035, "OK": 0.0475, "OR": 0.08, "PA": 0.0307, "RI": 0.0599, "SC": 0.064, "UT": 0.0465, "VT": 0.066, "VA": 0.0575, "WV": 0.0495, "WI": 0.053 };
 
-        const stateTaxRates = { 
-            "none": 0.0, "AL": 0.05, "AZ": 0.025, "AR": 0.047, "CA": 0.08, "CO": 0.044, 
-            "CT": 0.06, "DE": 0.066, "GA": 0.0549, "HI": 0.07, "ID": 0.058, "IL": 0.0495, 
-            "IN": 0.0315, "IA": 0.057, "KS": 0.057, "KY": 0.045, "LA": 0.0425, "ME": 0.0715, 
-            "MD": 0.0575, "MA": 0.05, "MI": 0.0425, "MN": 0.068, "MS": 0.04, "MO": 0.0495, 
-            "MT": 0.059, "NE": 0.0584, "NJ": 0.06, "NM": 0.049, "NY": 0.06, "NC": 0.045, 
-            "ND": 0.025, "OH": 0.035, "OK": 0.0475, "OR": 0.08, "PA": 0.0307, "RI": 0.0599, 
-            "SC": 0.064, "UT": 0.0465, "VT": 0.066, "VA": 0.0575, "WV": 0.0495, "WI": 0.053 
-        };
-
-        function toggleTheme() { 
-            const body = document.body; 
-            const themeBtn = document.getElementById('themeToggle'); 
-            body.classList.toggle('dark-mode'); 
-            const isDark = body.classList.contains('dark-mode');
-            themeBtn.innerHTML = isDark ? '☀️' : '🌙';
-            localStorage.setItem('app_theme', isDark ? 'dark' : 'light'); 
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            document.getElementById('themeToggle').innerHTML = isDark ? '☀️' : '🌙';
+            localStorage.setItem('app_theme', isDark ? 'dark' : 'light');
         }
 
-        window.onload = function() { 
+        window.onload = function() {
             document.getElementById('monthlyIncome').value = localStorage.getItem("app_income") || "";
             document.getElementById('monthlyExpenses').value = localStorage.getItem("app_expenses") || "";
             document.getElementById('userState').value = localStorage.getItem("app_state") || "none";
@@ -702,10 +479,9 @@
                 document.getElementById('themeToggle').innerHTML = '☀️'; 
             }
             setTimeout(() => { 
-                if(!localStorage.getItem('cookie_consent')) {
-                    document.getElementById('cookieBanner').classList.add('show'); 
-                }
-            }, 1200); 
+                if(!localStorage.getItem('cookie_consent')) document.getElementById('cookieBanner').classList.add('show'); 
+            }, 1500);
+            document.getElementById('reportDate').innerText = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
         }
 
         function handleCookieConsent(status) { 
@@ -719,102 +495,85 @@
             localStorage.setItem("app_state", document.getElementById('userState').value); 
         }
 
-        function animateValue(obj, start, end, duration) { 
-            let startTimestamp = null; 
-            const step = (timestamp) => { 
-                if (!startTimestamp) startTimestamp = timestamp; 
-                const progress = Math.min((timestamp - startTimestamp) / duration, 1); 
-                const easeOut = 1 - Math.pow(1 - progress, 3); 
-                obj.innerHTML = formatter.format(easeOut * (end - start) + start); 
-                if (progress < 1) {
-                    window.requestAnimationFrame(step); 
-                }
-            }; 
-            window.requestAnimationFrame(step); 
+        function triggerLeadGate() {
+            if (parseFloat(document.getElementById('monthlyIncome').value) <= 0 || isNaN(parseFloat(document.getElementById('monthlyIncome').value))) {
+                alert("Please enter a valid monthly revenue amount."); return;
+            }
+            document.getElementById('inputSection').style.display = 'none';
+            document.getElementById('leadGate').style.display = 'block';
         }
 
-        function triggerLeadGate() { 
-            const val = parseFloat(document.getElementById('monthlyIncome').value);
-            if (isNaN(val) || val < 0) { 
-                alert("Please enter a valid monthly revenue amount."); 
-                return; 
-            } 
-            document.getElementById('inputSection').style.display = 'none'; 
-            document.getElementById('leadGate').style.display = 'block'; 
-        }
-
-        async function unlockResults() { 
-            const email = document.getElementById('userEmail').value; 
-            const check = document.getElementById('dataConsent').checked;
-            if(!email.includes('@') || !check) { 
-                alert("A valid email and data consent are required."); 
-                return; 
-            } 
-            document.getElementById('unlockBtn').disabled = true; 
-            document.getElementById('unlockBtn').innerHTML = "Generating Strategy..."; 
+        async function unlockResults() {
+            const email = document.getElementById('userEmail').value;
+            if(!email.includes('@') || !document.getElementById('dataConsent').checked) {
+                alert("A valid email and data consent are required to unlock your strategy."); return;
+            }
+            
+            document.getElementById('unlockBtn').disabled = true;
+            document.getElementById('unlockBtn').innerHTML = "Generating Report...";
             
             const formData = new FormData();
-            formData.append("Email_Address", email);
-            formData.append("Business_State", document.getElementById('userState').value);
-            formData.append("Estimated_Monthly_Income", document.getElementById('monthlyIncome').value);
+            formData.append("Email", email);
+            formData.append("State", document.getElementById('userState').value);
+            formData.append("Revenue", document.getElementById('monthlyIncome').value);
 
             try { 
-                await fetch("https://formspree.io/f/mreowvpj", { 
-                    method: "POST", 
-                    body: formData, 
-                    headers: { 'Accept': 'application/json' } 
-                }); 
-            } catch (error) {
-                console.warn("Silent submission failure.");
-            } 
-            
-            confetti({ 
-                particleCount: 150, spread: 75, origin: { y: 0.6 },
-                colors: ['#0f172a', '#10b981', '#3b82f6']
-            }); 
+                await fetch("https://formspree.io/f/mreowvpj", { method: "POST", body: formData, headers: { 'Accept': 'application/json' } }); 
+            } catch (e) {}
 
-            document.getElementById('leadGate').style.display = 'none'; 
-            document.getElementById('resultArea').style.display = 'block'; 
-            
-            const income = parseFloat(document.getElementById('monthlyIncome').value) || 0; 
+            confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#0f172a', '#10b981', '#3b82f6'] });
+            document.getElementById('leadGate').style.display = 'none';
+            document.getElementById('resultArea').style.display = 'block';
+
+            const revenue = parseFloat(document.getElementById('monthlyIncome').value);
             const expenses = parseFloat(document.getElementById('monthlyExpenses').value) || 0;
-            const profit = Math.max(0, (income - expenses) * 12); 
+            const profit = (revenue - expenses) * 12;
             
-            const ss = profit * 0.124; 
-            const med = profit * 0.029; 
-            const state = profit * stateTaxRates[document.getElementById('userState').value]; 
-            const total = ss + med + state; 
-            
-            animateValue(document.getElementById('taxAmount'), 0, total, 1500); 
-            document.getElementById('ssTaxAmt').innerHTML = formatter.format(ss); 
-            document.getElementById('medTaxAmt').innerHTML = formatter.format(med); 
-            document.getElementById('stateTaxAmt').innerHTML = formatter.format(state); 
+            const ss = Math.max(0, profit * 0.124);
+            const med = Math.max(0, profit * 0.029);
+            const state = Math.max(0, profit * stateTaxRates[document.getElementById('userState').value]);
+            const total = ss + med + state;
+
+            const animateValue = (obj, start, end, duration) => {
+                let startTimestamp = null;
+                const step = (timestamp) => {
+                    if (!startTimestamp) startTimestamp = timestamp;
+                    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                    obj.innerHTML = formatter.format(progress * (end - start) + start);
+                    if (progress < 1) window.requestAnimationFrame(step);
+                };
+                window.requestAnimationFrame(step);
+            };
+
+            animateValue(document.getElementById('taxAmount'), 0, total, 1500);
+            document.getElementById('ssTaxAmt').innerHTML = formatter.format(ss);
+            document.getElementById('medTaxAmt').innerHTML = formatter.format(med);
+            document.getElementById('stateTaxAmt').innerHTML = formatter.format(state);
             
             setTimeout(() => { 
-                const takeHomePct = profit > 0 ? ((profit - total) / profit) * 100 : 0; 
-                document.getElementById('takeHomeBar').style.width = `${takeHomePct}%`; 
-                document.getElementById('taxBar').style.width = `${100 - takeHomePct}%`; 
-            }, 200); 
+                const pct = profit > 0 ? ((profit - total) / profit) * 100 : 0;
+                document.getElementById('takeHomeBar').style.width = `${pct}%`;
+                document.getElementById('taxBar').style.width = `${100 - pct}%`;
+            }, 200);
         }
 
         function startOver() { 
-            document.getElementById('resultArea').style.display = 'none'; 
-            document.getElementById('inputSection').style.display = 'block'; 
-            document.getElementById('unlockBtn').disabled = false; 
-            document.getElementById('unlockBtn').innerHTML = "Unlock My Results"; 
-            document.getElementById('takeHomeBar').style.width = '0%';
-            document.getElementById('taxBar').style.width = '0%';
+            document.getElementById('resultArea').style.display = 'none';
+            document.getElementById('inputSection').style.display = 'block';
+            document.getElementById('unlockBtn').disabled = false;
+            document.getElementById('unlockBtn').innerHTML = "Unlock Strategy Report";
         }
 
-        function downloadPDF() { 
-            const report = document.getElementById('pdfContent');
+        function downloadPDF() {
+            const element = document.getElementById('pdfContent');
             const opt = { 
-                margin: 0.75, 
-                filename: 'My_LLC_Tax_Strategy.pdf', 
-                html2canvas: { scale: 2 }, 
+                margin: 0.5, 
+                filename: 'LLC_Tax_Strategy.pdf', 
+                image: { type: 'jpeg', quality: 1 }, 
+                html2canvas: { scale: 3, useCORS: true }, 
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } 
             };
-            html2pdf().set(opt).from(report).save(); 
+            html2pdf().set(opt).from(element).save();
         }
     </script>
 </body>
