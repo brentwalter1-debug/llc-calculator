@@ -88,12 +88,18 @@
         .toggle-btn.active { background: var(--card-bg); color: var(--primary-navy); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
         .input-group { position: relative; margin-bottom: 24px; text-align: left; }
-        .input-label { display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; }
+        .input-label { display: flex; align-items: center; font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; }
         
         input, select { width: 100%; background: var(--input-bg); border: 2px solid var(--input-border); border-radius: 14px; padding: 16px; font-size: 1.1rem; font-weight: 600; color: var(--text-main); box-sizing: border-box; transition: 0.2s; }
         input:focus { border-color: var(--accent-blue); background: var(--card-bg); outline: none; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
 
-        /* --- SAVINGS HOOK PREVIEW --- */
+        /* --- PREMIUM CSS TOOLTIPS --- */
+        .tooltip { position: relative; display: inline-block; margin-left: 8px; cursor: help; }
+        .tooltip .info-icon { display: flex; align-items: center; justify-content: center; width: 16px; height: 16px; background: var(--input-border); color: var(--text-muted); border-radius: 50%; font-size: 11px; font-style: normal; font-weight: 800; }
+        .tooltip .tooltiptext { visibility: hidden; width: 220px; background-color: var(--primary-navy); color: #fff; text-align: left; border-radius: 8px; padding: 12px; position: absolute; z-index: 100; bottom: 125%; left: 50%; margin-left: -110px; opacity: 0; transition: opacity 0.3s; font-size: 0.75rem; line-height: 1.4; text-transform: none; pointer-events: none; box-shadow: 0 10px 15px rgba(0,0,0,0.2); }
+        .tooltip:hover .tooltiptext { visibility: visible; opacity: 1; }
+
+        /* --- SAVINGS HOOK --- */
         #savingsHook { display: none; margin-bottom: 20px; padding: 12px; background: rgba(16, 185, 129, 0.05); border-radius: 12px; color: var(--success-green); font-size: 0.9rem; font-weight: 700; border: 1px dashed var(--success-green); }
 
         /* --- AUDIT SCANNER --- */
@@ -106,11 +112,10 @@
 
         /* --- DUAL TRACK CHART --- */
         .result-area { display: none; margin-top: 40px; border-top: 2px solid var(--input-border); padding-top: 40px; }
-        
-        .chart-container { display: flex; align-items: flex-end; justify-content: space-around; height: 180px; margin: 40px 0; padding-bottom: 30px; border-bottom: 2px solid var(--input-border); position: relative; }
-        .bar-wrap { width: 80px; display: flex; flex-direction: column; align-items: center; gap: 10px; position: relative; height: 100%; justify-content: flex-end; }
-        .bar { width: 100%; border-radius: 8px 8px 0 0; height: 0%; transition: height 1.2s cubic-bezier(0.17, 0.67, 0.83, 0.67); min-height: 5px; }
-        .bar-label { font-size: 0.65rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; position: absolute; bottom: -25px; width: 100px; text-align: center; }
+        .chart-container { display: flex; align-items: flex-end; justify-content: space-around; height: 180px; margin: 40px 0 60px 0; border-bottom: 2px solid var(--input-border); position: relative; }
+        .bar-wrap { width: 80px; display: flex; flex-direction: column; align-items: center; position: relative; height: 100%; justify-content: flex-end; }
+        .bar { width: 100%; border-radius: 8px 8px 0 0; height: 0%; transition: height 1.2s cubic-bezier(0.17, 0.67, 0.83, 0.67); min-height: 2px; }
+        .bar-label { font-size: 0.65rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; position: absolute; bottom: -30px; width: 100px; text-align: center; }
 
         .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
         .track-box { padding: 20px; border-radius: 16px; text-align: center; border: 1px solid var(--input-border); }
@@ -118,11 +123,8 @@
         .track-label { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px; }
         .track-val { font-size: 1.3rem; font-weight: 800; color: var(--primary-navy); }
 
-        /* --- TOOLTIPS --- */
-        .info-icon { display: inline-block; width: 14px; height: 14px; background: var(--input-border); color: var(--text-muted); border-radius: 50%; font-size: 10px; line-height: 14px; text-align: center; margin-left: 5px; cursor: help; font-style: normal; font-weight: 800; }
-
-        .cta-btn { display: block; background-color: var(--success-green); color: white; text-decoration: none; padding: 22px; border-radius: 16px; font-size: 1.2rem; font-weight: 800; margin: 25px 0; text-align: center; transition: 0.2s; }
-        .cta-btn:hover { background-color: var(--success-green-hover); transform: translateY(-1px); }
+        .cta-btn { display: block; background-color: var(--success-green); color: white; text-decoration: none; padding: 22px; border-radius: 16px; font-size: 1.2rem; font-weight: 800; margin: 25px 0; text-align: center; transition: transform 0.2s; }
+        .cta-btn:hover { transform: translateY(-2px); background-color: var(--success-green-hover); }
         .secondary-btn { width: 100%; background: transparent; border: 2px solid var(--input-border); padding: 16px; border-radius: 16px; font-weight: 700; cursor: pointer; color: var(--text-main); margin-bottom: 10px; }
         
         .savings-ticker { margin-top: 30px; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; text-align: center; width: 100%; }
@@ -131,21 +133,13 @@
         footer { margin-top: 40px; font-size: 0.8rem; color: var(--text-muted); text-align: center; padding-bottom: 40px; }
         footer span { cursor: pointer; text-decoration: underline; margin: 0 10px; }
 
-        .cookie-banner { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg); padding: 30px; box-shadow: 0 -15px 50px rgba(0,0,0,0.2); z-index: 9999; display: flex; flex-direction: column; align-items: center; transform: translateY(100%); transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); border-top: 4px solid var(--input-border); }
-        .cookie-banner.show { transform: translateY(0); }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <div class="ad-slot">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-1553305917920278"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1553305917920278" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
         <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
 
@@ -163,13 +157,17 @@
             </div>
 
             <div class="input-group">
-                <label class="input-label">Gross Monthly Revenue <i class="info-icon" title="Estimated monthly gross sales before expenses.">?</i></label>
-                <input type="text" id="monthlyIncome" placeholder="$ 0,000" oninput="formatCurrencyInput(this); updateHook();">
+                <label class="input-label">Gross Monthly Revenue 
+                    <div class="tooltip"><i class="info-icon">?</i><span class="tooltiptext">Enter your total monthly sales before taxes and expenses.</span></div>
+                </label>
+                <input type="text" id="monthlyIncome" placeholder="$ 0,000" oninput="handleCurrencyInput(this); updateHook();">
             </div>
 
             <div class="input-group">
-                <label class="input-label">Business Expenses <i class="info-icon" title="Monthly overhead, software, and marketing costs.">?</i></label>
-                <input type="text" id="monthlyExpenses" placeholder="$ 0,000" oninput="formatCurrencyInput(this); updateHook();">
+                <label class="input-label">Business Expenses
+                    <div class="tooltip"><i class="info-icon">?</i><span class="tooltiptext">Monthly costs like software, marketing, and equipment.</span></div>
+                </label>
+                <input type="text" id="monthlyExpenses" placeholder="$ 0,000" oninput="handleCurrencyInput(this); updateHook();">
             </div>
 
             <div class="input-group">
@@ -193,8 +191,7 @@
                 </select>
             </div>
 
-            <div id="savingsHook">Estimated Potential Savings: <span id="hookAmt">$0</span></div>
-
+            <div id="savingsHook">Est. S-Corp Savings Potential: <span id="hookAmt">$0</span></div>
             <button class="primary-btn" onclick="startAudit()">Begin Structural Audit</button>
         </div>
 
@@ -205,64 +202,30 @@
 
         <div class="lead-gate" id="leadGate">
             <h3 style="margin:0 0 10px 0; font-weight:800;">Strategy Analysis Ready</h3>
-            <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:25px;">Enter your business email to unlock the visual comparison audit and your tailored PDF strategy.</p>
+            <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:25px;">Enter your business email to unlock the visual audit comparison and your tailored strategy PDF.</p>
             <input type="email" id="userEmail" placeholder="ceo@company.com" required>
             <button class="primary-btn" id="unlockBtn" style="margin-top:20px;" onclick="unlockResults()">View Final Audit</button>
-            
-            <div class="trust-badges">
-                <span>🔒 Bank-Level Encryption</span>
-                <span>⚖️ CPA-Verified Math</span>
-            </div>
+            <div class="trust-badges"><span>🛡️ CPA-Verified Logic</span><span>🔒 Encrypted Data</span></div>
         </div>
 
         <div class="result-area" id="resultArea">
             <div class="chart-container">
-                <div class="bar-wrap">
-                    <div id="barSole" class="bar" style="background: var(--danger-red);"></div>
-                    <span class="bar-label">Sole Prop</span>
-                </div>
-                <div class="bar-wrap">
-                    <div id="barScorp" class="bar" style="background: var(--success-green);"></div>
-                    <span class="bar-label">S-Corp</span>
-                </div>
+                <div class="bar-wrap"><div id="barSole" class="bar" style="background:var(--danger-red);"></div><span class="bar-label">Sole Prop</span></div>
+                <div class="bar-wrap"><div id="barScorp" class="bar" style="background:var(--success-green);"></div><span class="bar-label">LLC S-Corp</span></div>
             </div>
-
             <div class="comparison-grid">
                 <div class="track-box"><div class="track-label">Sole Prop Tax</div><div id="uiSoleTax" class="track-val" style="color:#ef4444;">$0</div></div>
                 <div class="track-box highlight"><div class="track-label">S-Corp Tax</div><div id="uiScorpTax" class="track-val" style="color:#10b981;">$0</div></div>
             </div>
-
             <div style="font-size:0.7rem; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Annual Tax Savings</div>
             <div style="font-size:3rem; font-weight:900; margin:5px 0 30px 0;" id="uiTotalSavings">$0.00</div>
-            
-            <a href="https://www.google.com/search?q=how+to+start+an+llc" id="affiliateBtn" class="cta-btn" target="_blank">Start Your LLC Today</a>
+            <a href="https://www.google.com/search?q=how+to+start+an+llc" class="cta-btn" target="_blank">Start LLC Today</a>
             <button class="secondary-btn" id="pdfBtnTrigger" onclick="downloadPDF()">📄 Download PDF Strategy Audit</button>
             <button class="secondary-btn" onclick="shareSite()">🔗 Share Strategy with Partner</button>
             <button class="reset-btn" onclick="location.reload()" style="background:none; border:none; text-decoration:underline; cursor:pointer; color:var(--text-muted); margin-top:15px;">🔄 New Calculation</button>
         </div>
 
         <div class="savings-ticker">Identified Savings Today: <span id="tickerVal">$142,500</span></div>
-    </div>
-
-    <div class="ad-slot">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-1553305917920278"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
-
-    <footer>
-        <p>&copy; 2026 LLC Threshold Strategist</p>
-        <span onclick="alert('Privacy Policy: We protect your data via Formspree encryption. We never sell your personal information.')">Privacy Policy</span> | 
-        <span onclick="alert('Terms of Service: This calculator is for educational estimation. Always consult with a licensed professional.')">Terms of Service</span>
-    </footer>
-
-    <div class="cookie-banner" id="cookieBanner">
-        <p style="font-size:0.85rem; text-align:center; max-width:800px; line-height:1.5;">We use essential cookies to maintain your tax estimates. By clicking "Accept", you consent to our secure data processing.</p>
-        <button class="primary-btn" style="padding:12px 60px; width:auto; margin-top:15px;" onclick="handleCookieConsent('accepted')">Accept All</button>
     </div>
 
     <script>
@@ -275,22 +238,19 @@
         function toggleTheme() { document.body.classList.toggle('dark-mode'); localStorage.setItem('app_theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light'); }
         function saveData() { localStorage.setItem("app_income", document.getElementById('monthlyIncome').value); localStorage.setItem("app_expenses", document.getElementById('monthlyExpenses').value); localStorage.setItem("app_state", document.getElementById('userState').value); }
         
-        function formatCurrencyInput(input) {
+        function handleCurrencyInput(input) {
             let val = input.value.replace(/\D/g, "");
-            input.value = val ? formatter.format(val / 1).split('.')[0] : "";
+            if (val === "") { input.value = ""; return; }
+            input.value = formatter.format(val / 1).split('.')[0];
             saveData();
         }
 
         function updateHook() {
-            const rawIncome = document.getElementById('monthlyIncome').value.replace(/\D/g, "");
-            const income = parseFloat(rawIncome) || 0;
-            if (income < 3000) { document.getElementById('savingsHook').style.display = 'none'; return; }
-            
-            const rawExpenses = document.getElementById('monthlyExpenses').value.replace(/\D/g, "");
-            const expenses = parseFloat(rawExpenses) || 0;
+            const income = parseFloat(document.getElementById('monthlyIncome').value.replace(/\D/g, "")) || 0;
+            if (income < 3500) { document.getElementById('savingsHook').style.display = 'none'; return; }
+            const expenses = parseFloat(document.getElementById('monthlyExpenses').value.replace(/\D/g, "")) || 0;
             const profit = (income - expenses) * 12;
-            const savings = (profit * 0.9235 * 0.153) * 0.6; // Rough 60% of SE tax hook
-            
+            const savings = (profit * 0.9235 * 0.153) * 0.6;
             document.getElementById('savingsHook').style.display = 'block';
             document.getElementById('hookAmt').innerText = formatter.format(savings).split('.')[0];
         }
@@ -300,118 +260,52 @@
             document.getElementById('monthlyExpenses').value = localStorage.getItem("app_expenses") || "";
             document.getElementById('userState').value = localStorage.getItem("app_state") || "none";
             if(localStorage.getItem("app_theme") === 'dark') document.body.classList.add('dark-mode');
-            setTimeout(() => { if(!localStorage.getItem('cookie_consent')) document.getElementById('cookieBanner').classList.add('show'); }, 1500);
-            setInterval(() => { 
-                let ticker = document.getElementById('tickerVal');
-                let val = parseInt(ticker.innerText.replace(/\D/g,'')); 
-                ticker.innerText = formatter.format(val + Math.floor(Math.random() * 85)).split('.')[0]; 
-            }, 3500);
+            setInterval(() => { let ticker = document.getElementById('tickerVal'); let val = parseInt(ticker.innerText.replace(/\D/g,'')); ticker.innerText = formatter.format(val + Math.floor(Math.random() * 85)).split('.')[0]; }, 3500);
         }
 
-        function handleCookieConsent(status) { localStorage.setItem('cookie_consent', status); document.getElementById('cookieBanner').classList.remove('show'); }
-
         function startAudit() {
-            const income = document.getElementById('monthlyIncome').value;
-            if(!income) { alert("Please enter your gross revenue."); return; }
+            if(!document.getElementById('monthlyIncome').value) { alert("Revenue required."); return; }
             document.getElementById('inputSection').style.display = 'none';
             document.getElementById('scannerSection').style.display = 'block';
             document.getElementById('pFill').style.width = '100%';
-            const steps = ["Auditing 2026 Federal Rates...", "Checking State Jurisdictions...", "Optimizing Structural Thresholds..."];
+            const steps = ["Auditing 2026 Federal Rates...", "Checking State Jurisdictions...", "Optimizing Thresholds..."];
             let i = 0;
             const interval = setInterval(() => { document.getElementById('scanText').innerText = steps[i]; i++; if(i === steps.length) { clearInterval(interval); setTimeout(() => { document.getElementById('scannerSection').style.display = 'none'; document.getElementById('leadGate').style.display = 'block'; }, 800); } }, 800);
         }
 
         async function unlockResults() {
             const email = document.getElementById('userEmail').value;
-            if(!email.includes('@')) { alert("A valid email is required to process the strategy."); return; }
+            if(!email.includes('@')) return;
             document.getElementById('unlockBtn').disabled = true;
-
             const income = parseFloat(document.getElementById('monthlyIncome').value.replace(/\D/g, ""));
-            const rawExpenses = document.getElementById('monthlyExpenses').value.replace(/\D/g, "");
-            const expenses = parseFloat(rawExpenses) || 0;
+            const expenses = parseFloat(document.getElementById('monthlyExpenses').value.replace(/\D/g, "")) || 0;
             const stateCode = document.getElementById('userState').value;
             const profit = (income - expenses) * 12;
-            
-            // IRS Accuracy Logic
             const seTaxBase = profit * 0.9235;
             const ssTax = Math.min(seTaxBase, 176100) * 0.124;
             const medTax = seTaxBase * 0.029;
             const stateTax = profit * stateRates[stateCode];
-            
             const totalSole = ssTax + medTax + stateTax;
             const totalScorp = (ssTax + medTax) * 0.4 + stateTax; 
             const savings = totalSole - totalScorp;
-
-            lastResultData = { ssTax, medTax, stateTax, totalSole, totalScorp, savings, stateCode, profit };
-
-            const formData = new FormData();
-            formData.append("Email", email); formData.append("Lead_Tier", savings > 5000 ? "TIER-1" : "TIER-2"); formData.append("Status", filingStatus); formData.append("Savings", savings);
-
-            try { await fetch("https://formspree.io/f/mreowvpj", { method: "POST", body: formData, headers: { 'Accept': 'application/json' } }); } catch (e) {}
-
+            lastResultData = { ssTax, medTax, stateTax, totalSole, savings, stateCode, profit };
+            try { await fetch("https://formspree.io/f/mreowvpj", { method: "POST", body: JSON.stringify({Email: email, Savings: savings, Revenue: profit}), headers: {'Accept': 'application/json'} }); } catch (e) {}
             confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
-            document.getElementById('leadGate').style.display = 'none'; 
-            document.getElementById('resultArea').style.display = 'block';
-            
+            document.getElementById('leadGate').style.display = 'none'; document.getElementById('resultArea').style.display = 'block';
             document.getElementById('uiSoleTax').innerText = formatter.format(totalSole).split('.')[0];
             document.getElementById('uiScorpTax').innerText = formatter.format(totalScorp).split('.')[0];
             document.getElementById('uiTotalSavings').innerText = formatter.format(savings).split('.')[0];
-
-            // Animate Charts with Fixed Heights
-            setTimeout(() => {
-                const max = Math.max(totalSole, totalScorp);
-                document.getElementById('barSole').style.height = (totalSole / max * 100) + '%';
-                document.getElementById('barScorp').style.height = (totalScorp / max * 100) + '%';
-            }, 300);
+            setTimeout(() => { const max = Math.max(totalSole, totalScorp); document.getElementById('barSole').style.height = (totalSole / max * 100) + '%'; document.getElementById('barScorp').style.height = (totalScorp / max * 100) + '%'; }, 300);
         }
 
         function downloadPDF() {
             const btn = document.getElementById('pdfBtnTrigger');
             btn.innerHTML = "⏳ Building Audit...";
-            btn.disabled = true;
-            const date = new Date().toLocaleDateString();
-            const jurisdiction = lastResultData.stateCode === 'none' ? 'No State Tax' : lastResultData.stateCode;
-
-            const pdfHtml = `
-                <div style="padding: 40px; font-family: 'Inter', sans-serif; color: #0f172a; background: #ffffff;">
-                    <div style="border-bottom: 5px solid #0f172a; padding-bottom: 20px; margin-bottom: 40px; display: flex; justify-content: space-between; align-items: center;">
-                        <span style="font-size: 1.6rem; font-weight: 900;">LLC STRATEGIST - TAX AUDIT</span>
-                        <span style="font-size: 0.75rem; font-weight: 800; color: #ef4444; border: 2px solid #ef4444; padding: 5px 10px; border-radius: 6px;">CONFIDENTIAL</span>
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 40px;">
-                        <div style="background: #f8fafc; padding: 20px; border: 1px solid #e2e8f0; border-radius: 14px;">
-                            <div style="font-size: 0.75rem; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 8px;">Jurisdiction</div>
-                            <div style="font-size: 1.2rem; font-weight: 800;">${jurisdiction}</div>
-                        </div>
-                        <div style="background: #f8fafc; padding: 20px; border: 1px solid #e2e8f0; border-radius: 14px;">
-                            <div style="font-size: 0.75rem; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 8px;">Audit Date</div>
-                            <div style="font-size: 1.2rem; font-weight: 800;">${date}</div>
-                        </div>
-                    </div>
-                    <div style="font-size: 0.8rem; font-weight: 800; color: #64748b; text-transform: uppercase;">Projected Annual Savings</div>
-                    <div style="font-size: 4rem; font-weight: 900; color: #0f172a; margin: 10px 0 40px 0;">${formatter.format(lastResultData.savings).split('.')[0]}</div>
-                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 40px;">
-                        <thead><tr style="text-align: left; font-size: 0.8rem; color: #64748b; border-bottom: 2px solid #e2e8f0;"><th style="padding-bottom: 12px;">Audit Category</th><th style="text-align: right; padding-bottom: 12px;">Liability</th></tr></thead>
-                        <tbody>
-                            <tr style="border-bottom: 1px solid #f1f5f9;"><td style="padding: 18px 0; font-weight: 600;">Federal Social Security (12.4%)</td><td style="text-align: right; font-family: monospace; font-weight: 800;">${formatter.format(lastResultData.ssTax)}</td></tr>
-                            <tr style="border-bottom: 1px solid #f1f5f9;"><td style="padding: 18px 0; font-weight: 600;">Federal Medicare (2.9%)</td><td style="text-align: right; font-family: monospace; font-weight: 800;">${formatter.format(lastResultData.medTax)}</td></tr>
-                            <tr style="border-bottom: 1px solid #f1f5f9;"><td style="padding: 18px 0; font-weight: 600;">State Personal Income Tax</td><td style="text-align: right; font-family: monospace; font-weight: 800;">${formatter.format(lastResultData.stateTax)}</td></tr>
-                        </tbody>
-                    </table>
-                    <div style="background: #0f172a; color: #ffffff; padding: 35px; border-radius: 20px; margin-top: 30px;">
-                        <div style="color: #10b981; font-weight: 900; font-size: 1rem; text-transform: uppercase; margin-bottom: 15px;">Strategic Structural Audit</div>
-                        <div style="font-size: 1rem; line-height: 1.6;">At ${formatter.format(lastResultData.profit).split('.')[0]} in annual net profit, your structural tax inefficiency is identified as ${formatter.format(lastResultData.savings).split('.')[0]}. An LLC with S-Corp election is mathematically superior for this income tier.</div>
-                    </div>
-                </div>
-            `;
-
-            html2pdf().set({ margin: 0.5, filename: 'Tax_Strategy_Audit.pdf', html2canvas: { scale: 3, useCORS: true }, jsPDF: { unit: 'in', format: 'letter' } }).from(pdfHtml).save().then(() => { btn.innerHTML = "📄 Download PDF Strategy Audit"; btn.disabled = false; });
+            const pdfHtml = `<div style="padding:40px; font-family:'Inter', sans-serif; color:#0f172a; background:#fff;"><div style="border-bottom:5px solid #0f172a; padding-bottom:20px; margin-bottom:40px; display:flex; justify-content:space-between; align-items:center;"><span style="font-size:1.6rem; font-weight:900;">TAX AUDIT REPORT</span><span style="font-size:0.75rem; font-weight:800; color:#ef4444; border:2px solid #ef4444; padding:5px 10px; border-radius:6px;">CONFIDENTIAL</span></div><div style="font-size:0.8rem; font-weight:800; color:#64748b; text-transform:uppercase;">Projected Annual Savings</div><div style="font-size:4rem; font-weight:900; color:#0f172a; margin:10px 0 40px 0;">${formatter.format(lastResultData.savings).split('.')[0]}</div><table style="width:100%; border-collapse:collapse; margin-bottom:40px;"><thead><tr style="text-align:left; font-size:0.8rem; color:#64748b; border-bottom:2px solid #e2e8f0;"><th style="padding-bottom:12px;">Audit Category</th><th style="text-align:right;">Liability</th></tr></thead><tbody><tr><td style="padding:18px 0; font-weight:600;">Federal SS (12.4%)</td><td style="text-align:right; font-family:monospace; font-weight:800;">${formatter.format(lastResultData.ssTax)}</td></tr><tr><td style="padding:18px 0; font-weight:600;">Federal Medicare (2.9%)</td><td style="text-align:right; font-family:monospace; font-weight:800;">${formatter.format(lastResultData.medTax)}</td></tr><tr><td style="padding:18px 0; font-weight:600;">State Income Tax</td><td style="text-align:right; font-family:monospace; font-weight:800;">${formatter.format(lastResultData.stateTax)}</td></tr></tbody></table><div style="background:#0f172a; color:#fff; padding:35px; border-radius:20px;"><div style="color:#10b981; font-weight:900; font-size:1rem; text-transform:uppercase; margin-bottom:15px;">Strategic Structural Audit</div><div style="font-size:1rem; line-height:1.6;">At ${formatter.format(lastResultData.profit).split('.')[0]} profit, your structural inefficiency cost is ${formatter.format(lastResultData.savings).split('.')[0]}. Transitioning to S-Corp election is recommended.</div></div></div>`;
+            html2pdf().set({ margin:0.5, filename:'Tax_Strategy_Audit.pdf', image:{type:'jpeg', quality:1}, html2canvas:{scale:3, useCORS:true}, jsPDF:{unit:'in', format:'letter'} }).from(pdfHtml).save().then(() => { btn.innerHTML = "📄 Download PDF Audit"; });
         }
 
-        function shareSite() {
-            const text = `I found ${document.getElementById('uiTotalSavings').innerText} in tax savings on the LLC Strategist! Check your threshold: ${window.location.href}`;
-            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
-        }
+        function shareSite() { window.open(`https://wa.me/?text=${encodeURIComponent('I just found ' + document.getElementById('uiTotalSavings').innerText + ' in tax savings! Check yours: ' + window.location.href)}`, '_blank'); }
     </script>
 </body>
 </html>
