@@ -8,10 +8,12 @@
     <meta name="description" content="Calculate your self-employment tax, state tax, and get a free customized PDF strategy report.">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
+        /* --- CSS VARIABLES FOR THEMING --- */
         :root {
             --primary-navy: #0f172a;
             --primary-navy-hover: #1e293b;
@@ -19,15 +21,29 @@
             --success-green-hover: #059669;
             --danger-red: #ef4444;
             --accent-blue: #3b82f6;
-            --bg-color: #f1f5f9;
+            --bg-color: #f8fafc;
             --card-bg: #ffffff;
             --text-main: #334155;
             --text-muted: #64748b;
+            --input-bg: #f8fafc;
+            --input-border: #cbd5e1;
+        }
+
+        /* --- DARK MODE OVERRIDES --- */
+        body.dark-mode {
+            --primary-navy: #60a5fa; /* Lighter blue for dark backgrounds */
+            --primary-navy-hover: #3b82f6;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --input-bg: #334155;
+            --input-border: #475569;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            background-color: var(--bg-color);
             color: var(--text-main);
             display: flex;
             justify-content: center;
@@ -36,6 +52,7 @@
             margin: 0;
             padding: 20px;
             box-sizing: border-box;
+            transition: background-color 0.3s ease;
         }
 
         .calculator-container {
@@ -44,20 +61,29 @@
             max-width: 500px;
             padding: 48px 40px;
             border-radius: 24px;
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.2);
             text-align: center;
             position: relative;
             overflow: hidden;
+            transition: background-color 0.3s ease;
         }
 
         .calculator-container::before {
             content: '';
             position: absolute; top: 0; left: 0; right: 0; height: 6px;
-            background: linear-gradient(90deg, var(--primary-navy), var(--accent-blue));
+            background: linear-gradient(90deg, #3b82f6, var(--success-green));
         }
 
-        h2 { color: var(--primary-navy); margin-top: 0; font-size: 1.75rem; font-weight: 700; margin-bottom: 8px; }
-        p.subtitle { font-size: 1rem; color: var(--text-muted); margin-bottom: 32px; }
+        .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        h2 { color: var(--primary-navy); margin: 0; font-size: 1.75rem; font-weight: 700; }
+        
+        .theme-toggle { 
+            background: none; border: none; font-size: 1.5rem; cursor: pointer; 
+            padding: 5px; border-radius: 50%; transition: background 0.2s;
+        }
+        .theme-toggle:hover { background: rgba(100, 116, 139, 0.1); }
+
+        p.subtitle { font-size: 1rem; color: var(--text-muted); margin-bottom: 32px; text-align: left; }
 
         .input-group { position: relative; margin-bottom: 20px; text-align: left; }
         .input-label { display: block; font-size: 0.875rem; font-weight: 600; color: var(--primary-navy); margin-bottom: 8px; }
@@ -66,17 +92,17 @@
         
         input[type="number"], select, input[type="email"] {
             width: 100%;
-            background-color: #f8fafc;
-            border: 1px solid #cbd5e1;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
             border-radius: 12px;
             font-size: 1.1rem; font-weight: 500; font-family: 'Inter', sans-serif;
-            color: var(--primary-navy); box-sizing: border-box; transition: all 0.2s ease;
+            color: var(--text-main); box-sizing: border-box; transition: all 0.2s ease;
         }
 
         input[type="number"] { padding: 14px 16px 14px 40px; }
         select, input[type="email"] { padding: 14px 16px; cursor: pointer; }
         
-        input:focus, select:focus { outline: none; background-color: #ffffff; border-color: var(--accent-blue); box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
+        input:focus, select:focus { outline: none; border-color: var(--accent-blue); box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2); }
         input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         
         button.primary-btn {
@@ -84,37 +110,41 @@
             border-radius: 12px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; margin-top: 10px;
         }
         button.primary-btn:hover { background-color: var(--primary-navy-hover); transform: translateY(-1px); }
-        button.primary-btn:disabled { background-color: #94a3b8; cursor: not-allowed; transform: none; }
+        button.primary-btn:disabled { background-color: var(--text-muted); cursor: not-allowed; transform: none; }
 
-        /* --- LEAD CAPTURE GATE --- */
+        /* Lead Gate */
         .lead-gate {
-            display: none; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; margin-top: 24px;
+            display: none; background-color: var(--input-bg); border: 1px solid var(--input-border); border-radius: 16px; padding: 24px; margin-top: 24px;
             animation: fadeIn 0.5s ease forwards; text-align: left;
         }
-        .lead-gate h3 { margin-top: 0; font-size: 1.2rem; color: var(--primary-navy); }
+        .lead-gate h3 { margin-top: 0; font-size: 1.2rem; color: var(--text-main); }
         .lead-gate p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px; }
 
-        /* --- RESULTS AREA --- */
-        .result-area { display: none; margin-top: 32px; padding-top: 32px; border-top: 1px solid #e2e8f0; animation: fadeIn 0.5s ease forwards; }
-        
-        #pdfContent { padding: 20px; background: white; border-radius: 12px; }
+        /* Results Area */
+        .result-area { display: none; margin-top: 32px; padding-top: 32px; border-top: 1px solid var(--input-border); animation: fadeIn 0.5s ease forwards; }
+        #pdfContent { padding: 20px; background: var(--card-bg); border-radius: 12px; }
         
         .tax-estimate { font-size: 1rem; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; font-weight: 600; }
         .tax-amount { font-weight: 700; color: var(--primary-navy); font-size: 2.5rem; margin: 0 0 8px 0; }
-        .state-tax-sub { font-size: 0.9rem; color: var(--danger-red); margin-bottom: 24px; font-weight: 500; }
 
-        .visual-bar-container { width: 100%; height: 24px; background-color: #e2e8f0; border-radius: 12px; overflow: hidden; display: flex; margin-bottom: 12px; }
+        /* Detailed Ledger Table */
+        .tax-ledger { width: 100%; text-align: left; margin-bottom: 24px; font-size: 0.9rem; border-collapse: collapse; }
+        .tax-ledger th, .tax-ledger td { padding: 8px 0; border-bottom: 1px solid var(--input-border); color: var(--text-main); }
+        .tax-ledger th { font-weight: 600; color: var(--text-muted); }
+        .tax-ledger .ledger-amount { text-align: right; font-family: monospace; font-size: 1rem;}
+
+        .visual-bar-container { width: 100%; height: 24px; background-color: var(--input-border); border-radius: 12px; overflow: hidden; display: flex; margin-bottom: 12px; }
         .take-home-bar { height: 100%; background-color: var(--primary-navy); width: 0%; transition: width 1.2s ease-out; }
         .tax-bar { height: 100%; background-color: var(--danger-red); width: 0%; transition: width 1.2s ease-out; }
         
-        .legend { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 500; margin-bottom: 24px; }
+        .legend { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 500; margin-bottom: 24px; color: var(--text-main); }
         .legend-item { display: flex; align-items: center; gap: 6px; }
         .dot-navy { height: 10px; width: 10px; background-color: var(--primary-navy); border-radius: 50%; }
         .dot-red { height: 10px; width: 10px; background-color: var(--danger-red); border-radius: 50%; }
 
-        .cta-btn { display: none; background-color: var(--success-green); color: white; text-decoration: none; padding: 16px 20px; border-radius: 12px; font-size: 1.1rem; font-weight: 700; width: 100%; box-sizing: border-box; display: inline-block; margin-top: 10px; }
-        .pdf-btn { background-color: #f1f5f9; color: var(--primary-navy); border: 1px solid #cbd5e1; padding: 14px; border-radius: 12px; font-weight: 600; width: 100%; cursor: pointer; margin-top: 12px; transition: all 0.2s ease; }
-        .pdf-btn:hover { background-color: #e2e8f0; }
+        .cta-btn { display: inline-block; background-color: var(--success-green); color: white; text-decoration: none; padding: 16px 20px; border-radius: 12px; font-size: 1.1rem; font-weight: 700; width: 100%; box-sizing: border-box; margin-top: 10px; }
+        .pdf-btn { background-color: transparent; color: var(--text-main); border: 2px solid var(--input-border); padding: 14px; border-radius: 12px; font-weight: 600; width: 100%; cursor: pointer; margin-top: 12px; transition: all 0.2s ease; }
+        .pdf-btn:hover { background-color: var(--input-bg); }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -122,7 +152,11 @@
 <body>
 
     <div class="calculator-container">
-        <h2>LLC Tax Strategist</h2>
+        
+        <div class="header-flex">
+            <h2>LLC Tax Strategist</h2>
+            <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙</button>
+        </div>
         <p class="subtitle">Enterprise-grade self-employment tax analysis.</p>
 
         <div class="input-group">
@@ -180,7 +214,25 @@
             <div id="pdfContent">
                 <div class="tax-estimate">Total Estimated Annual Tax</div>
                 <div class="tax-amount" id="taxAmount">$0.00</div>
-                <div class="state-tax-sub" id="stateTaxSub">Includes $0.00 in State Tax</div>
+                
+                <table class="tax-ledger">
+                    <tr>
+                        <th>Tax Category</th>
+                        <th class="ledger-amount">Estimated Cost</th>
+                    </tr>
+                    <tr>
+                        <td>Social Security (12.4%)</td>
+                        <td class="ledger-amount" id="ssTaxAmt">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Medicare (2.9%)</td>
+                        <td class="ledger-amount" id="medTaxAmt">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td>State Income Tax</td>
+                        <td class="ledger-amount" id="stateTaxAmt">$0.00</td>
+                    </tr>
+                </table>
                 
                 <div class="visual-bar-container">
                     <div class="take-home-bar" id="takeHomeBar"></div>
@@ -200,7 +252,6 @@
     <script>
         const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 
-        // Complete 50-State approximate tax rates dictionary (Averages for MVP purposes)
         const stateTaxRates = {
             "none": 0.0, "AL": 0.05, "AZ": 0.025, "AR": 0.047, "CA": 0.08, "CO": 0.044,
             "CT": 0.06, "DE": 0.066, "GA": 0.0549, "HI": 0.07, "ID": 0.058, "IL": 0.0495,
@@ -211,16 +262,38 @@
             "SC": 0.064, "UT": 0.0465, "VT": 0.066, "VA": 0.0575, "WV": 0.0495, "WI": 0.053
         };
 
+        // --- DARK MODE LOGIC ---
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.getElementById('themeToggle');
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                themeBtn.innerHTML = '☀️';
+                localStorage.setItem('app_theme', 'dark');
+            } else {
+                themeBtn.innerHTML = '🌙';
+                localStorage.setItem('app_theme', 'light');
+            }
+        }
+
+        window.onload = function() {
+            // Load previous data
+            if(localStorage.getItem("app_income")) document.getElementById('monthlyIncome').value = localStorage.getItem("app_income");
+            if(localStorage.getItem("app_expenses")) document.getElementById('monthlyExpenses').value = localStorage.getItem("app_expenses");
+            if(localStorage.getItem("app_state")) document.getElementById('userState').value = localStorage.getItem("app_state");
+            
+            // Load theme preference
+            if(localStorage.getItem("app_theme") === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('themeToggle').innerHTML = '☀️';
+            }
+        }
+
         function saveData() {
             localStorage.setItem("app_income", document.getElementById('monthlyIncome').value);
             localStorage.setItem("app_expenses", document.getElementById('monthlyExpenses').value);
             localStorage.setItem("app_state", document.getElementById('userState').value);
-        }
-
-        window.onload = function() {
-            if(localStorage.getItem("app_income")) document.getElementById('monthlyIncome').value = localStorage.getItem("app_income");
-            if(localStorage.getItem("app_expenses")) document.getElementById('monthlyExpenses').value = localStorage.getItem("app_expenses");
-            if(localStorage.getItem("app_state")) document.getElementById('userState').value = localStorage.getItem("app_state");
         }
 
         function animateValue(obj, start, end, duration) {
@@ -239,7 +312,6 @@
             const income = parseFloat(document.getElementById('monthlyIncome').value);
             const expenses = parseFloat(document.getElementById('monthlyExpenses').value) || 0;
             
-            // Error Handling: Stop if inputs are invalid or negative
             if (isNaN(income) || income < 0 || expenses < 0) {
                 alert("Please enter valid, positive numbers for your revenue and expenses.");
                 return;
@@ -249,40 +321,40 @@
             document.getElementById('leadGate').style.display = 'block';
         }
 
-        // --- ASYNC API FETCH (The Database Connection) ---
         async function unlockResults() {
             const emailInput = document.getElementById('userEmail');
             const email = emailInput.value;
             const unlockBtn = document.getElementById('unlockBtn');
 
-            // Regex for bulletproof email validation
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if(!emailRegex.test(email)) {
-                alert("Please enter a valid email address to unlock your strategy.");
+                alert("Please enter a valid email address.");
                 return;
             }
 
-            // UI Polish: Change button to show it's processing
             unlockBtn.disabled = true;
             unlockBtn.innerHTML = "Analyzing...";
 
-            // 1. Prepare the data to send to your database
             const formData = new FormData();
             formData.append("email", email);
 
-            // 2. Actually send the data using JavaScript Fetch API
             try {
-                // IMPORTANT: Replace the URL below with your actual Formspree endpoint later!
+                // REPLACE URL BELOW WITH REAL FORMSPREE LINK
                 await fetch("https://formspree.io/YOUR_FORM_ID_HERE", {
-                    method: "POST",
-                    body: formData,
-                    headers: { 'Accept': 'application/json' }
+                    method: "POST", body: formData, headers: { 'Accept': 'application/json' }
                 });
             } catch (error) {
-                console.log("Database connection not yet configured. Bypassing for local test.");
+                console.log("Formspree bypass successful.");
             }
 
-            // 3. Process the math and show the results
+            // SUCCESS! Trigger Confetti Animation
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#10b981', '#3b82f6', '#0f172a']
+            });
+
             document.getElementById('leadGate').style.display = 'none';
             document.getElementById('resultArea').style.display = 'block';
 
@@ -293,21 +365,20 @@
             const netMonthlyProfit = income - expenses;
             const annualProfit = Math.max(0, netMonthlyProfit * 12);
             
-            const fedTaxRate = 0.153; 
-            const stateTaxRate = stateTaxRates[state];
+            // Detailed Breakdown Math
+            const ssTax = annualProfit * 0.124;
+            const medTax = annualProfit * 0.029;
+            const stateTax = annualProfit * stateTaxRates[state];
             
-            const estimatedFedTax = annualProfit * fedTaxRate;
-            const estimatedStateTax = annualProfit * stateTaxRate;
-            const totalTax = estimatedFedTax + estimatedStateTax;
+            const totalTax = ssTax + medTax + stateTax;
             const takeHomePay = annualProfit - totalTax;
 
+            // Update UI
             animateValue(document.getElementById('taxAmount'), 0, totalTax, 1200);
             
-            if(estimatedStateTax > 0) {
-                document.getElementById('stateTaxSub').innerHTML = `Includes ${formatter.format(estimatedStateTax)} in Estimated State Tax`;
-            } else {
-                document.getElementById('stateTaxSub').innerHTML = `You live in a great state! No state income tax applied.`;
-            }
+            document.getElementById('ssTaxAmt').innerHTML = formatter.format(ssTax);
+            document.getElementById('medTaxAmt').innerHTML = formatter.format(medTax);
+            document.getElementById('stateTaxAmt').innerHTML = stateTax > 0 ? formatter.format(stateTax) : "$0.00";
 
             setTimeout(() => {
                 const takeHomePct = annualProfit > 0 ? (takeHomePay / annualProfit) * 100 : 0;
