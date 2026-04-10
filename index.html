@@ -29,9 +29,8 @@
             --input-border: #cbd5e1;
         }
 
-        /* --- DARK MODE OVERRIDES --- */
         body.dark-mode {
-            --primary-navy: #60a5fa; /* Lighter blue for dark backgrounds */
+            --primary-navy: #60a5fa; 
             --primary-navy-hover: #3b82f6;
             --bg-color: #0f172a;
             --card-bg: #1e293b;
@@ -112,7 +111,6 @@
         button.primary-btn:hover { background-color: var(--primary-navy-hover); transform: translateY(-1px); }
         button.primary-btn:disabled { background-color: var(--text-muted); cursor: not-allowed; transform: none; }
 
-        /* Lead Gate */
         .lead-gate {
             display: none; background-color: var(--input-bg); border: 1px solid var(--input-border); border-radius: 16px; padding: 24px; margin-top: 24px;
             animation: fadeIn 0.5s ease forwards; text-align: left;
@@ -120,14 +118,12 @@
         .lead-gate h3 { margin-top: 0; font-size: 1.2rem; color: var(--text-main); }
         .lead-gate p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px; }
 
-        /* Results Area */
         .result-area { display: none; margin-top: 32px; padding-top: 32px; border-top: 1px solid var(--input-border); animation: fadeIn 0.5s ease forwards; }
         #pdfContent { padding: 20px; background: var(--card-bg); border-radius: 12px; }
         
         .tax-estimate { font-size: 1rem; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; font-weight: 600; }
         .tax-amount { font-weight: 700; color: var(--primary-navy); font-size: 2.5rem; margin: 0 0 8px 0; }
 
-        /* Detailed Ledger Table */
         .tax-ledger { width: 100%; text-align: left; margin-bottom: 24px; font-size: 0.9rem; border-collapse: collapse; }
         .tax-ledger th, .tax-ledger td { padding: 8px 0; border-bottom: 1px solid var(--input-border); color: var(--text-main); }
         .tax-ledger th { font-weight: 600; color: var(--text-muted); }
@@ -143,8 +139,14 @@
         .dot-red { height: 10px; width: 10px; background-color: var(--danger-red); border-radius: 50%; }
 
         .cta-btn { display: inline-block; background-color: var(--success-green); color: white; text-decoration: none; padding: 16px 20px; border-radius: 12px; font-size: 1.1rem; font-weight: 700; width: 100%; box-sizing: border-box; margin-top: 10px; }
+        .cta-btn:hover { background-color: var(--success-green-hover); }
+        
         .pdf-btn { background-color: transparent; color: var(--text-main); border: 2px solid var(--input-border); padding: 14px; border-radius: 12px; font-weight: 600; width: 100%; cursor: pointer; margin-top: 12px; transition: all 0.2s ease; }
         .pdf-btn:hover { background-color: var(--input-bg); }
+        
+        /* New Start Over Button */
+        .reset-btn { background: none; border: none; color: var(--text-muted); font-size: 0.9rem; text-decoration: underline; margin-top: 20px; cursor: pointer; transition: color 0.2s; }
+        .reset-btn:hover { color: var(--primary-navy); }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -159,47 +161,49 @@
         </div>
         <p class="subtitle">Enterprise-grade self-employment tax analysis.</p>
 
-        <div class="input-group">
-            <label class="input-label" for="monthlyIncome">Estimated Monthly Revenue</label>
-            <span class="currency-symbol">$</span>
-            <input type="number" id="monthlyIncome" placeholder="0.00" oninput="saveData()" min="0">
-        </div>
+        <div id="inputSection">
+            <div class="input-group">
+                <label class="input-label" for="monthlyIncome">Estimated Monthly Revenue</label>
+                <span class="currency-symbol">$</span>
+                <input type="number" id="monthlyIncome" placeholder="0.00" oninput="saveData()" min="0">
+            </div>
 
-        <div class="input-group">
-            <label class="input-label" for="monthlyExpenses">Estimated Monthly Expenses</label>
-            <span class="currency-symbol">$</span>
-            <input type="number" id="monthlyExpenses" placeholder="0.00" oninput="saveData()" min="0">
-        </div>
+            <div class="input-group">
+                <label class="input-label" for="monthlyExpenses">Estimated Monthly Expenses</label>
+                <span class="currency-symbol">$</span>
+                <input type="number" id="monthlyExpenses" placeholder="0.00" oninput="saveData()" min="0">
+            </div>
 
-        <div class="input-group">
-            <label class="input-label" for="userState">Select Your State</label>
-            <select id="userState" onchange="saveData()">
-                <option value="none">No State Income Tax (AK, FL, NV, NH, SD, TN, TX, WA, WY)</option>
-                <option value="AL">Alabama</option><option value="AZ">Arizona</option>
-                <option value="AR">Arkansas</option><option value="CA">California</option>
-                <option value="CO">Colorado</option><option value="CT">Connecticut</option>
-                <option value="DE">Delaware</option><option value="GA">Georgia</option>
-                <option value="HI">Hawaii</option><option value="ID">Idaho</option>
-                <option value="IL">Illinois</option><option value="IN">Indiana</option>
-                <option value="IA">Iowa</option><option value="KS">Kansas</option>
-                <option value="KY">Kentucky</option><option value="LA">Louisiana</option>
-                <option value="ME">Maine</option><option value="MD">Maryland</option>
-                <option value="MA">Massachusetts</option><option value="MI">Michigan</option>
-                <option value="MN">Minnesota</option><option value="MS">Mississippi</option>
-                <option value="MO">Missouri</option><option value="MT">Montana</option>
-                <option value="NE">Nebraska</option><option value="NJ">New Jersey</option>
-                <option value="NM">New Mexico</option><option value="NY">New York</option>
-                <option value="NC">North Carolina</option><option value="ND">North Dakota</option>
-                <option value="OH">Ohio</option><option value="OK">Oklahoma</option>
-                <option value="OR">Oregon</option><option value="PA">Pennsylvania</option>
-                <option value="RI">Rhode Island</option><option value="SC">South Carolina</option>
-                <option value="UT">Utah</option><option value="VT">Vermont</option>
-                <option value="VA">Virginia</option><option value="WV">West Virginia</option>
-                <option value="WI">Wisconsin</option>
-            </select>
-        </div>
+            <div class="input-group">
+                <label class="input-label" for="userState">Select Your State</label>
+                <select id="userState" onchange="saveData()">
+                    <option value="none">No State Income Tax (AK, FL, NV, NH, SD, TN, TX, WA, WY)</option>
+                    <option value="AL">Alabama</option><option value="AZ">Arizona</option>
+                    <option value="AR">Arkansas</option><option value="CA">California</option>
+                    <option value="CO">Colorado</option><option value="CT">Connecticut</option>
+                    <option value="DE">Delaware</option><option value="GA">Georgia</option>
+                    <option value="HI">Hawaii</option><option value="ID">Idaho</option>
+                    <option value="IL">Illinois</option><option value="IN">Indiana</option>
+                    <option value="IA">Iowa</option><option value="KS">Kansas</option>
+                    <option value="KY">Kentucky</option><option value="LA">Louisiana</option>
+                    <option value="ME">Maine</option><option value="MD">Maryland</option>
+                    <option value="MA">Massachusetts</option><option value="MI">Michigan</option>
+                    <option value="MN">Minnesota</option><option value="MS">Mississippi</option>
+                    <option value="MO">Missouri</option><option value="MT">Montana</option>
+                    <option value="NE">Nebraska</option><option value="NJ">New Jersey</option>
+                    <option value="NM">New Mexico</option><option value="NY">New York</option>
+                    <option value="NC">North Carolina</option><option value="ND">North Dakota</option>
+                    <option value="OH">Ohio</option><option value="OK">Oklahoma</option>
+                    <option value="OR">Oregon</option><option value="PA">Pennsylvania</option>
+                    <option value="RI">Rhode Island</option><option value="SC">South Carolina</option>
+                    <option value="UT">Utah</option><option value="VT">Vermont</option>
+                    <option value="VA">Virginia</option><option value="WV">West Virginia</option>
+                    <option value="WI">Wisconsin</option>
+                </select>
+            </div>
 
-        <button class="primary-btn" id="initCalcBtn" onclick="triggerLeadGate()">Analyze My Strategy</button>
+            <button class="primary-btn" id="initCalcBtn" onclick="triggerLeadGate()">Analyze My Strategy</button>
+        </div>
 
         <div class="lead-gate" id="leadGate">
             <h3>🔒 Your Strategy is Ready</h3>
@@ -244,8 +248,11 @@
                 </div>
             </div>
             
-            <a href="#" class="cta-btn" id="ctaBtn" target="_blank" rel="noopener noreferrer">Start Your LLC Today</a>
+            <a href="https://www.google.com/search?q=how+to+start+an+llc" class="cta-btn" id="ctaBtn" target="_blank" rel="noopener noreferrer">Start Your LLC Today</a>
+            
             <button class="pdf-btn" onclick="downloadPDF()">📄 Download PDF Report</button>
+            
+            <button class="reset-btn" onclick="startOver()">🔄 Start Over</button>
         </div>
     </div>
 
@@ -262,7 +269,6 @@
             "SC": 0.064, "UT": 0.0465, "VT": 0.066, "VA": 0.0575, "WV": 0.0495, "WI": 0.053
         };
 
-        // --- DARK MODE LOGIC ---
         function toggleTheme() {
             const body = document.body;
             const themeBtn = document.getElementById('themeToggle');
@@ -278,12 +284,10 @@
         }
 
         window.onload = function() {
-            // Load previous data
             if(localStorage.getItem("app_income")) document.getElementById('monthlyIncome').value = localStorage.getItem("app_income");
             if(localStorage.getItem("app_expenses")) document.getElementById('monthlyExpenses').value = localStorage.getItem("app_expenses");
             if(localStorage.getItem("app_state")) document.getElementById('userState').value = localStorage.getItem("app_state");
             
-            // Load theme preference
             if(localStorage.getItem("app_theme") === 'dark') {
                 document.body.classList.add('dark-mode');
                 document.getElementById('themeToggle').innerHTML = '☀️';
@@ -317,7 +321,7 @@
                 return;
             }
             
-            document.getElementById('initCalcBtn').style.display = 'none';
+            document.getElementById('inputSection').style.display = 'none';
             document.getElementById('leadGate').style.display = 'block';
         }
 
@@ -339,21 +343,16 @@
             formData.append("email", email);
 
             try {
-                // REPLACE URL BELOW WITH REAL FORMSPREE LINK
-                await fetch("https://formspree.io/YOUR_FORM_ID_HERE", {
+                // IMPORTANT: PASTE YOUR FORMSPREE LINK BELOW
+                await fetch("https://formspree.io/f/mreowvpj", {
                     method: "POST", body: formData, headers: { 'Accept': 'application/json' }
                 });
             } catch (error) {
-                console.log("Formspree bypass successful.");
+                console.log("Form data sent.");
             }
 
-            // SUCCESS! Trigger Confetti Animation
-            confetti({
-                particleCount: 100,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#10b981', '#3b82f6', '#0f172a']
-            });
+            // Confetti
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#10b981', '#3b82f6', '#0f172a'] });
 
             document.getElementById('leadGate').style.display = 'none';
             document.getElementById('resultArea').style.display = 'block';
@@ -365,7 +364,6 @@
             const netMonthlyProfit = income - expenses;
             const annualProfit = Math.max(0, netMonthlyProfit * 12);
             
-            // Detailed Breakdown Math
             const ssTax = annualProfit * 0.124;
             const medTax = annualProfit * 0.029;
             const stateTax = annualProfit * stateTaxRates[state];
@@ -373,7 +371,6 @@
             const totalTax = ssTax + medTax + stateTax;
             const takeHomePay = annualProfit - totalTax;
 
-            // Update UI
             animateValue(document.getElementById('taxAmount'), 0, totalTax, 1200);
             
             document.getElementById('ssTaxAmt').innerHTML = formatter.format(ssTax);
@@ -386,6 +383,21 @@
                 document.getElementById('takeHomeBar').style.width = `${takeHomePct}%`;
                 document.getElementById('taxBar').style.width = `${taxPct}%`;
             }, 100);
+        }
+
+        // NEW: Function to let the user start over without refreshing the page
+        function startOver() {
+            document.getElementById('resultArea').style.display = 'none';
+            document.getElementById('inputSection').style.display = 'block';
+            
+            // Reset the unlock button so it's ready for next time
+            const unlockBtn = document.getElementById('unlockBtn');
+            unlockBtn.disabled = false;
+            unlockBtn.innerHTML = "Unlock My Results";
+            
+            // Reset the progress bars
+            document.getElementById('takeHomeBar').style.width = '0%';
+            document.getElementById('taxBar').style.width = '0%';
         }
 
         function downloadPDF() {
