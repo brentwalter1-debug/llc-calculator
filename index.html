@@ -10,6 +10,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ADSENSE_ID_HERE" crossorigin="anonymous"></script>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
@@ -45,13 +47,31 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 20px;
+            padding: 20px 20px 100px 20px;
             box-sizing: border-box;
             transition: background-color 0.3s ease;
+        }
+
+        /* --- ADVERTISEMENT SLOTS --- */
+        .ad-slot {
+            width: 100%;
+            max-width: 728px;
+            height: 90px;
+            background-color: var(--input-bg);
+            border: 1px dashed var(--text-muted);
+            color: var(--text-muted);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            margin: 20px 0;
+            border-radius: 8px;
+            text-transform: uppercase;
         }
 
         .calculator-container {
@@ -65,45 +85,44 @@
             position: relative;
             overflow: hidden;
             transition: background-color 0.3s ease;
+            margin: 20px 0;
         }
 
         .calculator-container::before {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0; height: 6px;
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px;
             background: linear-gradient(90deg, #3b82f6, var(--success-green));
         }
 
         .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         h2 { color: var(--primary-navy); margin: 0; font-size: 1.75rem; font-weight: 700; }
         
-        .theme-toggle { 
-            background: none; border: none; font-size: 1.5rem; cursor: pointer; 
-            padding: 5px; border-radius: 50%; transition: background 0.2s;
-        }
+        .theme-toggle { background: none; border: none; font-size: 1.5rem; cursor: pointer; padding: 5px; border-radius: 50%; transition: background 0.2s; }
         .theme-toggle:hover { background: rgba(100, 116, 139, 0.1); }
 
         p.subtitle { font-size: 1rem; color: var(--text-muted); margin-bottom: 32px; text-align: left; }
 
         .input-group { position: relative; margin-bottom: 20px; text-align: left; }
         .input-label { display: block; font-size: 0.875rem; font-weight: 600; color: var(--primary-navy); margin-bottom: 8px; }
-        
         .currency-symbol { position: absolute; left: 16px; bottom: 14px; color: var(--text-muted); font-weight: 500; font-size: 1.1rem; }
         
         input[type="number"], select, input[type="email"] {
-            width: 100%;
-            background-color: var(--input-bg);
-            border: 1px solid var(--input-border);
-            border-radius: 12px;
-            font-size: 1.1rem; font-weight: 500; font-family: 'Inter', sans-serif;
+            width: 100%; background-color: var(--input-bg); border: 1px solid var(--input-border);
+            border-radius: 12px; font-size: 1.1rem; font-weight: 500; font-family: 'Inter', sans-serif;
             color: var(--text-main); box-sizing: border-box; transition: all 0.2s ease;
         }
 
         input[type="number"] { padding: 14px 16px 14px 40px; }
         select, input[type="email"] { padding: 14px 16px; cursor: pointer; }
-        
         input:focus, select:focus { outline: none; border-color: var(--accent-blue); box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2); }
         input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         
+        .consent-group {
+            display: flex; align-items: flex-start; gap: 10px; margin-top: 16px; margin-bottom: 16px; text-align: left;
+        }
+        .consent-group input[type="checkbox"] { width: 18px; height: 18px; margin-top: 2px; cursor: pointer; }
+        .consent-label { font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; }
+        .consent-label a { color: var(--accent-blue); text-decoration: underline; }
+
         button.primary-btn {
             width: 100%; background-color: var(--primary-navy); color: white; border: none; padding: 16px;
             border-radius: 12px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; margin-top: 10px;
@@ -111,15 +130,12 @@
         button.primary-btn:hover { background-color: var(--primary-navy-hover); transform: translateY(-1px); }
         button.primary-btn:disabled { background-color: var(--text-muted); cursor: not-allowed; transform: none; }
 
-        .lead-gate {
-            display: none; background-color: var(--input-bg); border: 1px solid var(--input-border); border-radius: 16px; padding: 24px; margin-top: 24px;
-            animation: fadeIn 0.5s ease forwards; text-align: left;
-        }
+        .lead-gate { display: none; background-color: var(--input-bg); border: 1px solid var(--input-border); border-radius: 16px; padding: 24px; margin-top: 24px; animation: fadeIn 0.5s ease forwards; text-align: left; }
         .lead-gate h3 { margin-top: 0; font-size: 1.2rem; color: var(--text-main); }
         .lead-gate p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px; }
 
         .result-area { display: none; margin-top: 32px; padding-top: 32px; border-top: 1px solid var(--input-border); animation: fadeIn 0.5s ease forwards; }
-        #pdfContent { padding: 20px; background: var(--card-bg); border-radius: 12px; }
+        #pdfContent { padding: 20px; background: var(--card-bg); border-radius: 12px; margin-bottom: 20px; }
         
         .tax-estimate { font-size: 1rem; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; font-weight: 600; }
         .tax-amount { font-weight: 700; color: var(--primary-navy); font-size: 2.5rem; margin: 0 0 8px 0; }
@@ -138,20 +154,66 @@
         .dot-navy { height: 10px; width: 10px; background-color: var(--primary-navy); border-radius: 50%; }
         .dot-red { height: 10px; width: 10px; background-color: var(--danger-red); border-radius: 50%; }
 
-        .cta-btn { display: inline-block; background-color: var(--success-green); color: white; text-decoration: none; padding: 16px 20px; border-radius: 12px; font-size: 1.1rem; font-weight: 700; width: 100%; box-sizing: border-box; margin-top: 10px; }
+        .cta-btn { display: inline-block; background-color: var(--success-green); color: white; text-decoration: none; padding: 16px 20px; border-radius: 12px; font-size: 1.1rem; font-weight: 700; width: 100%; box-sizing: border-box; margin-bottom: 12px; }
         .cta-btn:hover { background-color: var(--success-green-hover); }
         
-        .pdf-btn { background-color: transparent; color: var(--text-main); border: 2px solid var(--input-border); padding: 14px; border-radius: 12px; font-weight: 600; width: 100%; cursor: pointer; margin-top: 12px; transition: all 0.2s ease; }
+        .pdf-btn { background-color: transparent; color: var(--text-main); border: 2px solid var(--input-border); padding: 14px; border-radius: 12px; font-weight: 600; width: 100%; cursor: pointer; transition: all 0.2s ease; margin-bottom: 12px;}
         .pdf-btn:hover { background-color: var(--input-bg); }
-        
-        /* New Start Over Button */
-        .reset-btn { background: none; border: none; color: var(--text-muted); font-size: 0.9rem; text-decoration: underline; margin-top: 20px; cursor: pointer; transition: color 0.2s; }
+
+        .reset-btn { background: none; border: none; color: var(--text-muted); font-size: 0.9rem; text-decoration: underline; margin-top: 10px; cursor: pointer; transition: color 0.2s; }
         .reset-btn:hover { color: var(--primary-navy); }
+
+        /* --- NEW: COOKIE CONSENT BANNER --- */
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--card-bg);
+            color: var(--text-main);
+            padding: 20px;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            border-top: 1px solid var(--input-border);
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .cookie-banner.show {
+            transform: translateY(0);
+        }
+        .cookie-text {
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+            max-width: 800px;
+            text-align: center;
+        }
+        .cookie-buttons {
+            display: flex;
+            gap: 12px;
+        }
+        .btn-accept {
+            background-color: var(--primary-navy); color: white; border: none; padding: 10px 24px;
+            border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;
+        }
+        .btn-accept:hover { background-color: var(--primary-navy-hover); }
+        .btn-decline {
+            background-color: transparent; color: var(--text-muted); border: 1px solid var(--input-border);
+            padding: 10px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;
+        }
+        .btn-decline:hover { background-color: var(--input-bg); }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
+
+    <div class="ad-slot">
+        Advertisement Placement (728x90)
+    </div>
 
     <div class="calculator-container">
         
@@ -211,6 +273,12 @@
             <div class="input-group">
                 <input type="email" id="userEmail" placeholder="your@email.com" required>
             </div>
+            
+            <div class="consent-group">
+                <input type="checkbox" id="dataConsent">
+                <label for="dataConsent" class="consent-label">I agree to the <a href="#">Privacy Policy</a>, and consent to my information being collected and used for relevant business offers.</label>
+            </div>
+
             <button class="primary-btn" id="unlockBtn" onclick="unlockResults()">Unlock My Results</button>
         </div>
 
@@ -249,10 +317,23 @@
             </div>
             
             <a href="https://www.google.com/search?q=how+to+start+an+llc" class="cta-btn" id="ctaBtn" target="_blank" rel="noopener noreferrer">Start Your LLC Today</a>
-            
             <button class="pdf-btn" onclick="downloadPDF()">📄 Download PDF Report</button>
             
             <button class="reset-btn" onclick="startOver()">🔄 Start Over</button>
+        </div>
+    </div>
+
+    <div class="ad-slot">
+        Advertisement Placement (728x90)
+    </div>
+
+    <div class="cookie-banner" id="cookieBanner">
+        <div class="cookie-text">
+            We use cookies and collect data to provide personalized ads, tailored business offers, and to analyze our website traffic. By clicking "Accept All", you consent to our use of cookies and data processing.
+        </div>
+        <div class="cookie-buttons">
+            <button class="btn-decline" onclick="handleCookieConsent('declined')">Decline</button>
+            <button class="btn-accept" onclick="handleCookieConsent('accepted')">Accept All</button>
         </div>
     </div>
 
@@ -292,6 +373,21 @@
                 document.body.classList.add('dark-mode');
                 document.getElementById('themeToggle').innerHTML = '☀️';
             }
+
+            // --- COOKIE BANNER LOGIC ON LOAD ---
+            setTimeout(() => {
+                if(!localStorage.getItem('cookie_consent')) {
+                    document.getElementById('cookieBanner').classList.add('show');
+                }
+            }, 1000); 
+        }
+
+        function handleCookieConsent(status) {
+            localStorage.setItem('cookie_consent', status);
+            document.getElementById('cookieBanner').classList.remove('show');
+            if(status === 'accepted') {
+                console.log("User consented to tracking. Ads initialized.");
+            }
         }
 
         function saveData() {
@@ -328,6 +424,7 @@
         async function unlockResults() {
             const emailInput = document.getElementById('userEmail');
             const email = emailInput.value;
+            const consentCheckbox = document.getElementById('dataConsent');
             const unlockBtn = document.getElementById('unlockBtn');
 
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -336,22 +433,27 @@
                 return;
             }
 
+            if(!consentCheckbox.checked) {
+                alert("You must agree to the Privacy Policy to unlock your results.");
+                return;
+            }
+
             unlockBtn.disabled = true;
             unlockBtn.innerHTML = "Analyzing...";
 
             const formData = new FormData();
             formData.append("email", email);
+            formData.append("consent_given", "true");
 
             try {
-                // IMPORTANT: PASTE YOUR FORMSPREE LINK BELOW
+                // LIVE FORMSPREE LINK HARDCODED HERE
                 await fetch("https://formspree.io/f/mreowvpj", {
                     method: "POST", body: formData, headers: { 'Accept': 'application/json' }
                 });
             } catch (error) {
-                console.log("Form data sent.");
+                console.log("Formspree bypass successful.");
             }
 
-            // Confetti
             confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#10b981', '#3b82f6', '#0f172a'] });
 
             document.getElementById('leadGate').style.display = 'none';
@@ -385,17 +487,14 @@
             }, 100);
         }
 
-        // NEW: Function to let the user start over without refreshing the page
         function startOver() {
             document.getElementById('resultArea').style.display = 'none';
             document.getElementById('inputSection').style.display = 'block';
             
-            // Reset the unlock button so it's ready for next time
             const unlockBtn = document.getElementById('unlockBtn');
             unlockBtn.disabled = false;
             unlockBtn.innerHTML = "Unlock My Results";
             
-            // Reset the progress bars
             document.getElementById('takeHomeBar').style.width = '0%';
             document.getElementById('taxBar').style.width = '0%';
         }
