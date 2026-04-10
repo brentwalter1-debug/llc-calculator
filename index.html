@@ -8,10 +8,6 @@
     <meta name="description" content="Calculate your exact self-employment tax burden and discover the LLC threshold to save thousands. Get a free, premium PDF tax strategy report instantly.">
     <meta name="keywords" content="LLC tax calculator, self employment tax, S-Corp threshold, tax savings, business tax strategist">
     
-    <meta property="og:title" content="LLC Tax Savings Calculator">
-    <meta property="og:description" content="Stop overpaying on taxes. Calculate your LLC threshold in 60 seconds.">
-    <meta property="og:type" content="website">
-    
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -76,7 +72,6 @@
             transition: background-color 0.3s ease;
         }
 
-        /* --- ADVERTISEMENT SLOT STYLING --- */
         .ad-slot {
             width: 100%; max-width: 728px; min-height: 90px;
             background-color: var(--card-bg); border: 1px solid var(--input-border);
@@ -85,7 +80,6 @@
             font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;
         }
 
-        /* --- MAIN CONTAINER --- */
         .calculator-container {
             background-color: var(--card-bg);
             width: 100%;
@@ -130,8 +124,8 @@
         .track-label { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px; }
         .track-val { font-size: 1.3rem; font-weight: 800; color: var(--primary-navy); }
 
-        /* --- PRINT TEMPLATE (HIDDEN FIX) --- */
-        #pdfPrintTemplate { position: absolute; left: -9999px; top: -9999px; width: 800px; padding: 50px; background: #ffffff; color: #0f172a; font-family: 'Inter', sans-serif; }
+        /* --- PRINT TEMPLATE (UPDATED FIX) --- */
+        #pdfPrintTemplate { display: none; width: 800px; padding: 50px; background: #ffffff; color: #0f172a; font-family: 'Inter', sans-serif; }
         .print-header { border-bottom: 5px solid #0f172a; padding-bottom: 20px; margin-bottom: 40px; display: flex; justify-content: space-between; align-items: center; }
         .print-table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
         .print-table th { text-align: left; font-size: 0.8rem; color: #64748b; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px; text-transform: uppercase; }
@@ -141,7 +135,6 @@
         .cta-btn { display: block; background-color: var(--success-green); color: white; text-decoration: none; padding: 22px; border-radius: 16px; font-size: 1.2rem; font-weight: 800; margin: 25px 0; }
         .secondary-btn { width: 100%; background: transparent; border: 2px solid var(--input-border); padding: 16px; border-radius: 16px; font-weight: 700; cursor: pointer; color: var(--text-main); margin-bottom: 10px; }
         
-        /* SAVINGS TICKER */
         .savings-ticker { margin-top: 30px; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
         #tickerVal { color: var(--success-green); font-weight: 800; }
 
@@ -351,12 +344,30 @@
             document.getElementById('printInsight').innerText = `At ${formatter.format(profit)} in projected annual business profit, your current Sole Proprietorship structure results in an unnecessary structural tax cost of ${formatter.format(savings)}. Transitioning to an LLC with S-Corp election is mathematically recommended to lower your effective tax rate.`;
         }
 
+        // --- THE PDF FINAL FIX ENGINE ---
         function downloadPDF() {
             const element = document.getElementById('pdfPrintTemplate');
             const btn = document.getElementById('pdfBtnTrigger');
-            btn.innerHTML = "⏳ Generating Audit...";
-            const opt = { margin: 0.5, filename: 'Tax_Strategy_Audit.pdf', image: { type: 'jpeg', quality: 1 }, html2canvas: { scale: 3, useCORS: true, letterRendering: true }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } };
-            html2pdf().set(opt).from(element).save().then(() => { btn.innerHTML = "📄 Download Strategy PDF"; });
+            btn.innerHTML = "⏳ Building Audit...";
+            btn.disabled = true;
+
+            // Make the template temporarily visible so the library can "see" it
+            element.style.display = 'block';
+
+            const opt = { 
+                margin: 0.5, 
+                filename: 'Tax_Strategy_Audit.pdf', 
+                image: { type: 'jpeg', quality: 1 }, 
+                html2canvas: { scale: 3, useCORS: true, letterRendering: true }, 
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } 
+            };
+
+            // Capture and save, then hide the template again
+            html2pdf().set(opt).from(element).save().then(() => {
+                element.style.display = 'none';
+                btn.innerHTML = "📄 Download Strategy PDF";
+                btn.disabled = false;
+            });
         }
 
         function shareSite() {
