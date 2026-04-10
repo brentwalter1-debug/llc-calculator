@@ -108,22 +108,25 @@
         .track-label { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px; }
         .track-val { font-size: 1.3rem; font-weight: 800; color: var(--primary-navy); }
 
-        /* --- THE PDF DESIGN (CRITICAL FIX: Ensure background is white for capture) --- */
-        #pdfContent { 
-            padding: 45px; 
-            background: #ffffff !important; 
-            color: #0f172a !important; 
-            text-align: left; 
-            line-height: 1.5; 
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
+        /* --- NEW: PRINT-SPECIFIC OVERLAY (HIDDEN FROM UI) --- */
+        #pdfPrintTemplate {
+            position: absolute;
+            left: -9999px;
+            top: -9999px;
+            width: 800px;
+            padding: 50px;
+            background: #ffffff;
+            color: #0f172a;
+            font-family: 'Inter', sans-serif;
         }
-        .pdf-header { border-bottom: 5px solid #0f172a; padding-bottom: 20px; margin-bottom: 40px; display: flex; justify-content: space-between; align-items: center; }
-        .audit-table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
-        .audit-table td { padding: 18px 0; border-bottom: 1px solid #f1f5f9; font-weight: 600; color: #0f172a !important; }
-        .audit-table .amt { text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 800; }
 
-        .cta-btn { display: block; background: var(--success-green); color: white; text-decoration: none; padding: 22px; border-radius: 16px; font-size: 1.2rem; font-weight: 800; margin: 25px 0; }
+        .print-header { border-bottom: 5px solid #0f172a; padding-bottom: 20px; margin-bottom: 40px; display: flex; justify-content: space-between; align-items: center; }
+        .print-table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
+        .print-table th { text-align: left; font-size: 0.8rem; color: #64748b; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px; text-transform: uppercase; }
+        .print-table td { padding: 18px 0; border-bottom: 1px solid #f1f5f9; font-weight: 600; font-size: 1.1rem; }
+        .print-table .amt { text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 800; }
+
+        .cta-btn { display: block; background-color: var(--success-green); color: white; text-decoration: none; padding: 22px; border-radius: 16px; font-size: 1.2rem; font-weight: 800; margin: 25px 0; }
         .secondary-btn { width: 100%; background: transparent; border: 2px solid var(--input-border); padding: 16px; border-radius: 16px; font-weight: 700; cursor: pointer; color: var(--text-main); margin-bottom: 10px; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
@@ -160,9 +163,9 @@
             </div>
 
             <div class="input-group">
-                <label class="input-label">Business Jurisdiction</label>
+                <label class="input-label">Jurisdiction</label>
                 <select id="userState" onchange="saveData()">
-                    <option value="none">No State Income Tax (TX, FL, WA, etc.)</option>
+                    <option value="none">No State Income Tax</option>
                     <option value="AL">Alabama</option><option value="AZ">Arizona</option><option value="AR">Arkansas</option>
                     <option value="CA">California</option><option value="CO">Colorado</option><option value="CT">Connecticut</option>
                     <option value="DE">Delaware</option><option value="GA">Georgia</option><option value="HI">Hawaii</option>
@@ -195,33 +198,49 @@
         </div>
 
         <div class="result-area" id="resultArea">
-            <div id="pdfContent">
-                <div class="pdf-header"><div style="font-weight:900; font-size:1.5rem; color:#0f172a !important;">STRATEGY AUDIT</div><div style="font-size:0.75rem; font-weight:800; color:#ef4444; border:2px solid #ef4444; padding:4px 9px; border-radius:5px;">PRIVATE</div></div>
-                
-                <div class="comparison-grid">
-                    <div class="track-box"><div class="track-label">Sole Prop (Current)</div><div id="soleTax" class="track-val" style="color:#ef4444 !important;">$0</div></div>
-                    <div class="track-box highlight"><div class="track-label">LLC S-Corp (Optimized)</div><div id="scorpTax" class="track-val" style="color:#10b981 !important;">$0</div></div>
-                </div>
-
-                <div style="font-size:0.7rem; font-weight:800; color:#64748b; text-transform:uppercase;">Estimated Annual Savings</div>
-                <div style="font-size:3.5rem; font-weight:900; margin:5px 0 30px 0; color:#0f172a !important;" id="totalSavings">$0.00</div>
-                
-                <table class="audit-table">
-                    <thead><tr style="text-align:left; font-size:0.7rem; color:#64748b; border-bottom:2px solid #e2e8f0;"><th style="padding-bottom:10px;">Audit Item</th><th style="text-align:right;">Estimated Liability</th></tr></thead>
-                    <tbody id="auditRows">
-                        </tbody>
-                </table>
-
-                <div style="background:#0f172a !important; color:#ffffff !important; padding:25px; border-radius:16px;">
-                    <div style="color:#10b981 !important; font-weight:900; font-size:0.9rem; margin-bottom:10px;">STRATEGIC INSIGHT</div>
-                    <div style="font-size:0.85rem; line-height:1.6;" id="insightText">Your revenue has officially crossed the S-Corp efficient threshold.</div>
-                </div>
+            <div class="comparison-grid">
+                <div class="track-box"><div class="track-label">Sole Prop (Current)</div><div id="uiSoleTax" class="track-val" style="color:#ef4444;">$0</div></div>
+                <div class="track-box highlight"><div class="track-label">LLC S-Corp (Optimized)</div><div id="uiScorpTax" class="track-val" style="color:#10b981;">$0</div></div>
             </div>
+
+            <div style="font-size:0.7rem; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Annual Tax Savings</div>
+            <div style="font-size:3rem; font-weight:900; margin:5px 0 30px 0;" id="uiTotalSavings">$0.00</div>
             
             <a href="https://www.google.com/search?q=how+to+start+an+llc" class="cta-btn" target="_blank">Start LLC Transition</a>
             <button class="secondary-btn" id="pdfBtnTrigger" onclick="downloadPDF()">📄 Download Strategy PDF</button>
             <button class="secondary-btn" onclick="shareSite()">🔗 Share Strategy with Partner</button>
             <button class="reset-btn" onclick="location.reload()" style="background:none; border:none; text-decoration:underline; cursor:pointer; color:var(--text-muted); margin-top:15px;">🔄 New Calculation</button>
+        </div>
+    </div>
+
+    <div id="pdfPrintTemplate">
+        <div class="print-header">
+            <div style="font-weight:900; font-size:1.8rem;">STRATEGY AUDIT</div>
+            <div style="font-size:0.8rem; font-weight:800; color:#ef4444; border:2px solid #ef4444; padding:5px 10px; border-radius:6px; text-transform:uppercase;">Confidential</div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:40px;">
+            <div style="background:#f8fafc; padding:20px; border-radius:14px; border:1px solid #e2e8f0;">
+                <div style="font-size:0.75rem; font-weight:800; color:#64748b; text-transform:uppercase; margin-bottom:10px;">Filing Status</div>
+                <div id="printStatus" style="font-weight:800; font-size:1.2rem;">Single</div>
+            </div>
+            <div style="background:#f8fafc; padding:20px; border-radius:14px; border:1px solid #e2e8f0;">
+                <div style="font-size:0.75rem; font-weight:800; color:#64748b; text-transform:uppercase; margin-bottom:10px;">Jurisdiction</div>
+                <div id="printState" style="font-weight:800; font-size:1.2rem;">N/A</div>
+            </div>
+        </div>
+
+        <div style="font-size:0.8rem; font-weight:800; color:#64748b; text-transform:uppercase;">Projected Annual Savings</div>
+        <div style="font-size:4rem; font-weight:900; color:#0f172a; margin:10px 0 40px 0; letter-spacing:-0.05em;" id="printSavings">$0.00</div>
+
+        <table class="print-table">
+            <thead><tr><th>Audit Category</th><th style="text-align:right;">Projected Liability</th></tr></thead>
+            <tbody id="printRows"></tbody>
+        </table>
+
+        <div style="background:#0f172a; color:#ffffff; padding:35px; border-radius:20px; margin-top:30px;">
+            <div style="color:#10b981; font-weight:900; font-size:1rem; text-transform:uppercase; margin-bottom:15px;">Structural Audit Insight</div>
+            <div style="font-size:1rem; line-height:1.6;" id="printInsight"></div>
         </div>
     </div>
 
@@ -240,7 +259,7 @@
         const stateRates = { "none": 0.0, "AL": 0.05, "AZ": 0.025, "AR": 0.047, "CA": 0.08, "CO": 0.044, "CT": 0.06, "DE": 0.066, "GA": 0.0549, "HI": 0.07, "ID": 0.058, "IL": 0.0495, "IN": 0.0315, "IA": 0.057, "KS": 0.057, "KY": 0.045, "LA": 0.0425, "ME": 0.0715, "MD": 0.0575, "MA": 0.05, "MI": 0.0425, "MN": 0.068, "MS": 0.04, "MO": 0.0495, "MT": 0.059, "NE": 0.0584, "NJ": 0.06, "NM": 0.049, "NY": 0.06, "NC": 0.045, "ND": 0.025, "OH": 0.035, "OK": 0.0475, "OR": 0.08, "PA": 0.0307, "RI": 0.0599, "SC": 0.064, "UT": 0.0465, "VT": 0.066, "VA": 0.0575, "WV": 0.0495, "WI": 0.053 };
         let filingStatus = "Single";
 
-        function setStatus(s) { filingStatus = s; document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); saveData(); }
+        function setStatus(s) { filingStatus = s; document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active')); event.currentTarget.classList.add('active'); saveData(); }
         function toggleTheme() { document.body.classList.toggle('dark-mode'); localStorage.setItem('app_theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light'); }
         function saveData() { localStorage.setItem("app_income", document.getElementById('monthlyIncome').value); localStorage.setItem("app_state", document.getElementById('userState').value); }
         
@@ -280,15 +299,15 @@
             const stateCode = document.getElementById('userState').value;
             const profit = income * 12;
             
-            // MATH Logic
+            // Core Math
             const ss = profit * 0.124; const med = profit * 0.029; const state = profit * stateRates[stateCode];
             const totalSole = ss + med + state;
             const totalScorp = (ss + med) * 0.4 + state; 
             const savings = totalSole - totalScorp;
 
+            // Formspree Submission
             const formData = new FormData();
-            formData.append("Email", email); formData.append("Status", filingStatus); formData.append("Revenue", profit); formData.append("Savings", savings);
-            formData.append("Tier", savings > 3500 ? "HIGH-VALUE" : "STANDARD");
+            formData.append("Email", email); formData.append("Status", filingStatus); formData.append("Jurisdiction", stateCode); formData.append("Annual_Savings", savings);
 
             try { await fetch("https://formspree.io/f/mreowvpj", { method: "POST", body: formData, headers: { 'Accept': 'application/json' } }); } catch (e) {}
 
@@ -296,44 +315,40 @@
             document.getElementById('leadGate').style.display = 'none'; 
             document.getElementById('resultArea').style.display = 'block';
             
-            document.getElementById('soleTax').innerText = formatter.format(totalSole);
-            document.getElementById('scorpTax').innerText = formatter.format(totalScorp);
-            document.getElementById('totalSavings').innerText = formatter.format(savings);
-            document.getElementById('auditRows').innerHTML = `<tr><td>Federal SS (12.4%)</td><td class="amt">${formatter.format(ss)}</td></tr><tr><td>Federal Medicare (2.9%)</td><td class="amt">${formatter.format(med)}</td></tr><tr><td>State Personal Tax</td><td class="amt">${formatter.format(state)}</td></tr>`;
-            document.getElementById('insightText').innerHTML = `At ${formatter.format(profit)} annual profit, you are currently projected to incur <strong>${formatter.format(totalSole)}</strong> in taxes. By structural transition, you could save <strong>${formatter.format(savings)}</strong> annually.`;
+            // Populate UI
+            document.getElementById('uiSoleTax').innerText = formatter.format(totalSole);
+            document.getElementById('uiScorpTax').innerText = formatter.format(totalScorp);
+            document.getElementById('uiTotalSavings').innerText = formatter.format(savings);
+            
+            // Populate Hidden PDF Template
+            document.getElementById('printStatus').innerText = filingStatus;
+            document.getElementById('printState').innerText = stateCode === 'none' ? 'No State Tax' : stateCode;
+            document.getElementById('printSavings').innerText = formatter.format(savings);
+            document.getElementById('printRows').innerHTML = `<tr><td>Federal SS (12.4%)</td><td class="amt">${formatter.format(ss)}</td></tr><tr><td>Federal Medicare (2.9%)</td><td class="amt">${formatter.format(med)}</td></tr><tr><td>State personal income Tax</td><td class="amt">${formatter.format(state)}</td></tr>`;
+            document.getElementById('printInsight').innerText = `At ${formatter.format(profit)} in projected annual business profit, your structural inefficiency cost is ${formatter.format(savings)}. Transitioning to an LLC with S-Corp election is mathematically recommended.`;
         }
 
-        function shareSite() {
-            const text = `Hey, I just calculated my business tax savings on this tool. It shows I could save over ${document.getElementById('totalSavings').innerText} annually! check it out: ${window.location.href}`;
-            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
-        }
-
-        // --- PDF ENGINE FIX: Ensuring capture stability ---
         function downloadPDF() {
-            const element = document.getElementById('pdfContent');
+            const element = document.getElementById('pdfPrintTemplate');
             const btn = document.getElementById('pdfBtnTrigger');
-            btn.innerHTML = "⏳ Processing...";
-            btn.disabled = true;
+            btn.innerHTML = "⏳ Generating Audit...";
 
             const opt = { 
                 margin: 0.5, 
                 filename: 'Tax_Strategy_Audit.pdf', 
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { 
-                    scale: 2, 
-                    useCORS: true, 
-                    logging: false,
-                    letterRendering: true,
-                    scrollY: 0,
-                    windowWidth: document.documentElement.offsetWidth
-                }, 
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 3, useCORS: true, letterRendering: true }, 
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } 
             };
 
-            html2pdf().set(opt).from(element).toPdf().get('pdf').save().then(() => {
+            html2pdf().set(opt).from(element).save().then(() => {
                 btn.innerHTML = "📄 Download Strategy PDF";
-                btn.disabled = false;
             });
+        }
+
+        function shareSite() {
+            const text = `I just used the LLC Strategist tool to find ${document.getElementById('uiTotalSavings').innerText} in tax savings! Check it out: ${window.location.href}`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
         }
     </script>
 </body>
