@@ -77,12 +77,14 @@
         select, input[type="email"] { padding: 14px 16px; cursor: pointer; }
         
         input:focus, select:focus { outline: none; background-color: #ffffff; border-color: var(--accent-blue); box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
+        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         
         button.primary-btn {
             width: 100%; background-color: var(--primary-navy); color: white; border: none; padding: 16px;
             border-radius: 12px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; margin-top: 10px;
         }
         button.primary-btn:hover { background-color: var(--primary-navy-hover); transform: translateY(-1px); }
+        button.primary-btn:disabled { background-color: #94a3b8; cursor: not-allowed; transform: none; }
 
         /* --- LEAD CAPTURE GATE --- */
         .lead-gate {
@@ -95,7 +97,6 @@
         /* --- RESULTS AREA --- */
         .result-area { display: none; margin-top: 32px; padding-top: 32px; border-top: 1px solid #e2e8f0; animation: fadeIn 0.5s ease forwards; }
         
-        /* The container we will turn into a PDF */
         #pdfContent { padding: 20px; background: white; border-radius: 12px; }
         
         .tax-estimate { font-size: 1rem; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; font-weight: 600; }
@@ -127,23 +128,41 @@
         <div class="input-group">
             <label class="input-label" for="monthlyIncome">Estimated Monthly Revenue</label>
             <span class="currency-symbol">$</span>
-            <input type="number" id="monthlyIncome" placeholder="0.00" oninput="saveData()">
+            <input type="number" id="monthlyIncome" placeholder="0.00" oninput="saveData()" min="0">
         </div>
 
         <div class="input-group">
             <label class="input-label" for="monthlyExpenses">Estimated Monthly Expenses</label>
             <span class="currency-symbol">$</span>
-            <input type="number" id="monthlyExpenses" placeholder="0.00" oninput="saveData()">
+            <input type="number" id="monthlyExpenses" placeholder="0.00" oninput="saveData()" min="0">
         </div>
 
         <div class="input-group">
             <label class="input-label" for="userState">Select Your State</label>
             <select id="userState" onchange="saveData()">
-                <option value="none">No State Income Tax (TX, FL, NV, etc.)</option>
-                <option value="CA">California (~8%)</option>
-                <option value="NY">New York (~6%)</option>
-                <option value="IL">Illinois (4.95%)</option>
-                </select>
+                <option value="none">No State Income Tax (AK, FL, NV, NH, SD, TN, TX, WA, WY)</option>
+                <option value="AL">Alabama</option><option value="AZ">Arizona</option>
+                <option value="AR">Arkansas</option><option value="CA">California</option>
+                <option value="CO">Colorado</option><option value="CT">Connecticut</option>
+                <option value="DE">Delaware</option><option value="GA">Georgia</option>
+                <option value="HI">Hawaii</option><option value="ID">Idaho</option>
+                <option value="IL">Illinois</option><option value="IN">Indiana</option>
+                <option value="IA">Iowa</option><option value="KS">Kansas</option>
+                <option value="KY">Kentucky</option><option value="LA">Louisiana</option>
+                <option value="ME">Maine</option><option value="MD">Maryland</option>
+                <option value="MA">Massachusetts</option><option value="MI">Michigan</option>
+                <option value="MN">Minnesota</option><option value="MS">Mississippi</option>
+                <option value="MO">Missouri</option><option value="MT">Montana</option>
+                <option value="NE">Nebraska</option><option value="NJ">New Jersey</option>
+                <option value="NM">New Mexico</option><option value="NY">New York</option>
+                <option value="NC">North Carolina</option><option value="ND">North Dakota</option>
+                <option value="OH">Ohio</option><option value="OK">Oklahoma</option>
+                <option value="OR">Oregon</option><option value="PA">Pennsylvania</option>
+                <option value="RI">Rhode Island</option><option value="SC">South Carolina</option>
+                <option value="UT">Utah</option><option value="VT">Vermont</option>
+                <option value="VA">Virginia</option><option value="WV">West Virginia</option>
+                <option value="WI">Wisconsin</option>
+            </select>
         </div>
 
         <button class="primary-btn" id="initCalcBtn" onclick="triggerLeadGate()">Analyze My Strategy</button>
@@ -154,7 +173,7 @@
             <div class="input-group">
                 <input type="email" id="userEmail" placeholder="your@email.com" required>
             </div>
-            <button class="primary-btn" onclick="unlockResults()">Unlock My Results</button>
+            <button class="primary-btn" id="unlockBtn" onclick="unlockResults()">Unlock My Results</button>
         </div>
 
         <div class="result-area" id="resultArea">
@@ -181,30 +200,29 @@
     <script>
         const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 
-        // Dictionary of estimated State Tax Rates (simplified for MVP)
+        // Complete 50-State approximate tax rates dictionary (Averages for MVP purposes)
         const stateTaxRates = {
-            "none": 0.0,
-            "CA": 0.08,
-            "NY": 0.06,
-            "IL": 0.0495
+            "none": 0.0, "AL": 0.05, "AZ": 0.025, "AR": 0.047, "CA": 0.08, "CO": 0.044,
+            "CT": 0.06, "DE": 0.066, "GA": 0.0549, "HI": 0.07, "ID": 0.058, "IL": 0.0495,
+            "IN": 0.0315, "IA": 0.057, "KS": 0.057, "KY": 0.045, "LA": 0.0425, "ME": 0.0715,
+            "MD": 0.0575, "MA": 0.05, "MI": 0.0425, "MN": 0.068, "MS": 0.04, "MO": 0.0495,
+            "MT": 0.059, "NE": 0.0584, "NJ": 0.06, "NM": 0.049, "NY": 0.06, "NC": 0.045,
+            "ND": 0.025, "OH": 0.035, "OK": 0.0475, "OR": 0.08, "PA": 0.0307, "RI": 0.0599,
+            "SC": 0.064, "UT": 0.0465, "VT": 0.066, "VA": 0.0575, "WV": 0.0495, "WI": 0.053
         };
 
-        // --- LOCAL STORAGE FUNCTIONALITY ---
-        // Saves data as the user types
         function saveData() {
             localStorage.setItem("app_income", document.getElementById('monthlyIncome').value);
             localStorage.setItem("app_expenses", document.getElementById('monthlyExpenses').value);
             localStorage.setItem("app_state", document.getElementById('userState').value);
         }
 
-        // Loads data when the page opens
         window.onload = function() {
             if(localStorage.getItem("app_income")) document.getElementById('monthlyIncome').value = localStorage.getItem("app_income");
             if(localStorage.getItem("app_expenses")) document.getElementById('monthlyExpenses').value = localStorage.getItem("app_expenses");
             if(localStorage.getItem("app_state")) document.getElementById('userState').value = localStorage.getItem("app_state");
         }
 
-        // --- ANIMATION FUNCTION ---
         function animateValue(obj, start, end, duration) {
             let startTimestamp = null;
             const step = (timestamp) => {
@@ -217,32 +235,57 @@
             window.requestAnimationFrame(step);
         }
 
-        // --- STEP 1: TRIGGER LEAD GATE ---
         function triggerLeadGate() {
             const income = parseFloat(document.getElementById('monthlyIncome').value);
-            if (isNaN(income) || income <= 0) {
-                alert("Please enter your estimated revenue first.");
+            const expenses = parseFloat(document.getElementById('monthlyExpenses').value) || 0;
+            
+            // Error Handling: Stop if inputs are invalid or negative
+            if (isNaN(income) || income < 0 || expenses < 0) {
+                alert("Please enter valid, positive numbers for your revenue and expenses.");
                 return;
             }
-            // Hide the calculate button and show the email form
+            
             document.getElementById('initCalcBtn').style.display = 'none';
             document.getElementById('leadGate').style.display = 'block';
         }
 
-        // --- STEP 2: UNLOCK RESULTS & CALCULATE ---
-        function unlockResults() {
-            const email = document.getElementById('userEmail').value;
-            if(!email.includes('@')) {
-                alert("Please enter a valid email to unlock your strategy.");
+        // --- ASYNC API FETCH (The Database Connection) ---
+        async function unlockResults() {
+            const emailInput = document.getElementById('userEmail');
+            const email = emailInput.value;
+            const unlockBtn = document.getElementById('unlockBtn');
+
+            // Regex for bulletproof email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if(!emailRegex.test(email)) {
+                alert("Please enter a valid email address to unlock your strategy.");
                 return;
             }
 
-            // In the future, we will write code here to send the email to your database!
+            // UI Polish: Change button to show it's processing
+            unlockBtn.disabled = true;
+            unlockBtn.innerHTML = "Analyzing...";
 
+            // 1. Prepare the data to send to your database
+            const formData = new FormData();
+            formData.append("email", email);
+
+            // 2. Actually send the data using JavaScript Fetch API
+            try {
+                // IMPORTANT: Replace the URL below with your actual Formspree endpoint later!
+                await fetch("https://formspree.io/YOUR_FORM_ID_HERE", {
+                    method: "POST",
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
+            } catch (error) {
+                console.log("Database connection not yet configured. Bypassing for local test.");
+            }
+
+            // 3. Process the math and show the results
             document.getElementById('leadGate').style.display = 'none';
             document.getElementById('resultArea').style.display = 'block';
 
-            // Core Math
             const income = parseFloat(document.getElementById('monthlyIncome').value);
             const expenses = parseFloat(document.getElementById('monthlyExpenses').value) || 0;
             const state = document.getElementById('userState').value;
@@ -258,7 +301,6 @@
             const totalTax = estimatedFedTax + estimatedStateTax;
             const takeHomePay = annualProfit - totalTax;
 
-            // DOM Updates
             animateValue(document.getElementById('taxAmount'), 0, totalTax, 1200);
             
             if(estimatedStateTax > 0) {
@@ -267,7 +309,6 @@
                 document.getElementById('stateTaxSub').innerHTML = `You live in a great state! No state income tax applied.`;
             }
 
-            // Visual Bar Logic
             setTimeout(() => {
                 const takeHomePct = annualProfit > 0 ? (takeHomePay / annualProfit) * 100 : 0;
                 const taxPct = annualProfit > 0 ? (totalTax / annualProfit) * 100 : 0;
@@ -276,18 +317,14 @@
             }, 100);
         }
 
-        // --- PDF GENERATION FUNCTION ---
         function downloadPDF() {
-            // Selects just the results area to turn into a document
             const element = document.getElementById('pdfContent');
             const opt = {
-                margin:       0.5,
-                filename:     'My_LLC_Tax_Strategy.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+                margin: 0.5, filename: 'My_LLC_Tax_Strategy.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
             };
-            // This runs the imported library
             html2pdf().set(opt).from(element).save();
         }
     </script>
