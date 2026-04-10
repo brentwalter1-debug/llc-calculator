@@ -6,26 +6,6 @@
     
     <title>LLC Threshold Calculator | Professional Tax Strategist</title>
     <meta name="description" content="Calculate your exact self-employment tax burden and discover the LLC threshold to save thousands. Get a free, premium PDF tax strategy report instantly.">
-    <meta name="keywords" content="LLC tax calculator, self employment tax, S-Corp threshold, tax savings, business tax strategist">
-    
-    <meta property="og:title" content="LLC Tax Savings Calculator">
-    <meta property="og:description" content="Stop overpaying on taxes. Calculate your LLC threshold in 60 seconds.">
-    <meta property="og:type" content="website">
-    
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FinancialCalculator",
-      "name": "LLC Threshold & Tax Strategist",
-      "description": "Professional tool for calculating self-employment and state tax burdens.",
-      "category": "Tax Tool",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      }
-    }
-    </script>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -40,10 +20,9 @@
             --primary-navy: #0f172a;
             --primary-navy-hover: #1e293b;
             --success-green: #10b981;
-            --success-green-hover: #059669;
             --danger-red: #ef4444;
             --accent-blue: #3b82f6;
-            --bg-color: #f1f5f9; /* Slightly darker for more contrast with the card */
+            --bg-color: #f1f5f9; 
             --card-bg: #ffffff;
             --text-main: #1e293b;
             --text-muted: #64748b;
@@ -51,10 +30,8 @@
             --input-border: #cbd5e1;
         }
 
-        /* --- DARK MODE THEME --- */
         body.dark-mode {
             --primary-navy: #60a5fa; 
-            --primary-navy-hover: #3b82f6;
             --bg-color: #0f172a;
             --card-bg: #1e293b;
             --text-main: #f1f5f9;
@@ -78,241 +55,100 @@
             transition: background-color 0.3s ease;
         }
 
-        /* --- ADVERTISEMENT SLOT STYLING --- */
         .ad-slot {
-            width: 100%;
-            max-width: 728px;
-            min-height: 90px;
-            background-color: var(--card-bg);
-            border: 1px solid var(--input-border);
-            color: var(--text-muted);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 20px 0;
-            border-radius: 12px;
-            text-transform: uppercase;
-            font-size: 0.7rem;
-            letter-spacing: 0.1em;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            width: 100%; max-width: 728px; min-height: 90px;
+            background-color: var(--card-bg); border: 1px solid var(--input-border);
+            margin: 20px 0; border-radius: 12px; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;
         }
 
-        /* --- MAIN CONTAINER --- */
         .calculator-container {
             background-color: var(--card-bg);
             width: 100%;
-            max-width: 500px;
+            max-width: 550px;
             padding: 48px;
             border-radius: 28px;
             border: 1px solid var(--input-border);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
             text-align: center;
             position: relative;
-            transition: background-color 0.3s ease;
         }
 
-        /* --- HEADER SECTION --- */
-        .header-flex {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
+        /* --- UI COMPONENTS --- */
+        .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        h2 { color: var(--primary-navy); margin: 0; font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; }
+        
+        .verified-badge { font-size: 0.65rem; font-weight: 800; color: var(--success-green); background: rgba(16, 185, 129, 0.1); padding: 4px 10px; border-radius: 20px; text-transform: uppercase; margin-bottom: 25px; display: inline-block; }
 
-        h2 {
-            color: var(--primary-navy);
-            margin: 0;
-            font-size: 1.6rem;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-        }
+        .status-toggle { display: flex; background: var(--input-bg); padding: 4px; border-radius: 12px; border: 1px solid var(--input-border); margin-bottom: 25px; }
+        .toggle-btn { flex: 1; padding: 10px; border-radius: 10px; border: none; background: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+        .toggle-btn.active { background: var(--card-bg); color: var(--primary-navy); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
-        .verified-badge {
-            display: inline-block;
-            font-size: 0.65rem;
-            font-weight: 800;
-            color: var(--success-green);
-            background: rgba(16, 185, 129, 0.1);
-            padding: 4px 8px;
-            border-radius: 20px;
-            margin-bottom: 24px;
-            text-transform: uppercase;
-        }
+        .input-group { position: relative; margin-bottom: 24px; text-align: left; }
+        .input-label { display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; }
+        
+        input, select { width: 100%; background: var(--input-bg); border: 2px solid var(--input-border); border-radius: 14px; padding: 16px; font-size: 1.1rem; font-weight: 600; color: var(--text-main); box-sizing: border-box; transition: 0.2s; }
+        input:focus { border-color: var(--accent-blue); background: var(--card-bg); outline: none; }
 
-        .header-divider {
-            height: 1px;
-            background: var(--input-border);
-            margin-bottom: 32px;
-            width: 100%;
-        }
+        /* --- AUDIT SCANNER --- */
+        #scannerSection { display: none; margin: 40px 0; }
+        .progress-track { width: 100%; height: 8px; background: var(--input-border); border-radius: 10px; overflow: hidden; margin-top: 15px; }
+        .progress-fill { width: 0%; height: 100%; background: var(--accent-blue); transition: width 2.5s ease-in-out; }
 
-        .theme-toggle {
-            background: none;
-            border: none;
-            font-size: 1.3rem;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 50%;
-            transition: background 0.2s ease;
-        }
+        .lead-gate { display: none; margin-top: 30px; text-align: left; animation: fadeIn 0.5s ease forwards; }
 
-        /* --- INPUT GROUPS --- */
-        .input-group {
-            position: relative;
-            margin-bottom: 24px;
-            text-align: left;
-        }
+        /* --- DUAL TRACK RESULTS --- */
+        .result-area { display: none; margin-top: 40px; border-top: 2px solid var(--input-border); padding-top: 40px; }
+        
+        .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
+        .track-box { padding: 20px; border-radius: 16px; text-align: center; border: 1px solid var(--input-border); }
+        .track-box.highlight { background: rgba(16, 185, 129, 0.05); border-color: var(--success-green); }
+        .track-label { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px; }
+        .track-val { font-size: 1.3rem; font-weight: 800; color: var(--primary-navy); }
 
-        .input-label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.02em;
-        }
-
-        input[type="number"], select, input[type="email"] {
-            width: 100%;
-            background-color: var(--input-bg);
-            border: 2px solid var(--input-border);
-            border-radius: 14px;
-            padding: 16px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            color: var(--text-main);
-            box-sizing: border-box;
-            transition: all 0.25s ease;
-        }
-
-        input:focus, select:focus {
-            border-color: var(--accent-blue);
-            background-color: var(--card-bg);
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
-            outline: none;
-        }
-
-        /* --- BUTTONS --- */
-        button.primary-btn {
-            width: 100%;
-            background-color: var(--primary-navy);
-            color: white;
-            border: none;
-            padding: 20px;
-            border-radius: 16px;
-            font-size: 1.15rem;
-            font-weight: 800;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin-top: 10px;
-            box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.2);
-        }
-
-        button.primary-btn:hover {
-            background-color: var(--primary-navy-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.3);
-        }
-
-        /* --- LEAD GATE --- */
-        .lead-gate {
-            display: none;
-            margin-top: 30px;
-            text-align: left;
-            animation: fadeIn 0.5s ease forwards;
-        }
-
-        /* --- RESULTS & PDF --- */
-        .result-area {
-            display: none;
-            margin-top: 40px;
-            padding-top: 40px;
-            border-top: 2px solid var(--input-border);
-            animation: fadeIn 0.4s ease forwards;
-        }
-
-        #pdfContent {
-            padding: 45px;
-            background: #ffffff;
-            color: #0f172a;
-            text-align: left;
-            border-radius: 0;
-            line-height: 1.5;
-        }
-
-        .pdf-letterhead {
-            border-bottom: 5px solid #0f172a;
-            padding-bottom: 20px;
-            margin-bottom: 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .firm-name { font-size: 1.7rem; font-weight: 900; letter-spacing: -0.03em; }
-        .pdf-data-box { background: #f8fafc; padding: 20px; border-radius: 14px; border: 1px solid #e2e8f0; margin-bottom: 30px; }
-        .tax-hero-amount { font-size: 3.8rem; font-weight: 900; color: #0f172a; margin: 10px 0 30px 0; letter-spacing: -0.05em; }
-
+        /* --- THE PDF DESIGN --- */
+        #pdfContent { padding: 45px; background: #ffffff; color: #0f172a; text-align: left; line-height: 1.5; }
+        .pdf-header { border-bottom: 5px solid #0f172a; padding-bottom: 20px; margin-bottom: 40px; display: flex; justify-content: space-between; align-items: center; }
         .audit-table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
-        .audit-table th { text-align: left; font-size: 0.75rem; font-weight: 800; color: #64748b; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px; text-transform: uppercase; }
-        .audit-table td { padding: 18px 0; border-bottom: 1px solid #f1f5f9; font-weight: 600; font-size: 1.05rem; }
+        .audit-table td { padding: 18px 0; border-bottom: 1px solid #f1f5f9; font-weight: 600; }
         .audit-table .amt { text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 800; }
 
-        .insight-card { background: #0f172a; color: #ffffff; padding: 30px; border-radius: 16px; margin-top: 20px; }
-        .insight-card strong { color: #10b981; }
+        .cta-btn { display: block; background: var(--success-green); color: white; text-decoration: none; padding: 22px; border-radius: 16px; font-size: 1.2rem; font-weight: 800; margin: 25px 0; }
+        .secondary-btn { width: 100%; background: transparent; border: 2px solid var(--input-border); padding: 16px; border-radius: 16px; font-weight: 700; cursor: pointer; color: var(--text-main); margin-bottom: 10px; }
 
-        /* --- UI ELEMENTS --- */
-        .cta-btn { display: block; background-color: var(--success-green); color: white; text-decoration: none; padding: 22px; border-radius: 16px; font-size: 1.2rem; font-weight: 800; margin: 25px 0 15px 0; transition: background 0.2s; }
-        .pdf-btn { width: 100%; background: transparent; color: var(--text-main); border: 2px solid var(--input-border); padding: 18px; border-radius: 16px; font-weight: 700; cursor: pointer; }
-        .reset-btn { background: none; border: none; color: var(--text-muted); text-decoration: underline; cursor: pointer; margin-top: 20px; font-size: 0.95rem; }
-
-        /* --- COMPLIANCE FOOTER --- */
-        footer { margin-top: 60px; font-size: 0.8rem; color: var(--text-muted); text-align: center; padding-bottom: 40px; }
-        footer span { cursor: pointer; text-decoration: underline; margin: 0 12px; }
-
-        /* --- COOKIE BANNER --- */
-        .cookie-banner { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg); padding: 30px; box-shadow: 0 -15px 50px rgba(0,0,0,0.2); z-index: 9999; display: flex; flex-direction: column; align-items: center; transform: translateY(100%); transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); border-top: 4px solid var(--input-border); }
-        .cookie-banner.show { transform: translateY(0); }
-        .btn-accept { background: var(--primary-navy); color: white; border: none; padding: 14px 60px; border-radius: 12px; font-weight: 800; cursor: pointer; margin-top: 25px; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <div class="ad-slot">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-1553305917920278"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1553305917920278" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
         <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
 
     <div class="calculator-container" id="mainApp">
         <div class="header-flex">
             <h2>LLC STRATEGIST</h2>
-            <button onclick="toggleTheme()" class="theme-toggle" id="themeToggle">🌙</button>
+            <button onclick="toggleTheme()" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">🌙</button>
         </div>
-        <div class="verified-badge">✓ Proprietary Tax Audit Engine</div>
-        <div class="header-divider"></div>
+        <div class="verified-badge">✓ 2026 Audit Engine Active</div>
 
         <div id="inputSection">
+            <div class="status-toggle">
+                <button class="toggle-btn active" id="btnSingle" onclick="setStatus('Single')">Single</button>
+                <button class="toggle-btn" id="btnMarried" onclick="setStatus('Married')">Married Filing Jointly</button>
+            </div>
+
             <div class="input-group">
                 <label class="input-label">Gross Monthly Revenue</label>
-                <input type="number" id="monthlyIncome" placeholder="$ 0.00" oninput="saveData()">
+                <input type="number" id="monthlyIncome" placeholder="$ 0,000" oninput="saveData()">
             </div>
+
             <div class="input-group">
-                <label class="input-label">Operating Expenses</label>
-                <input type="number" id="monthlyExpenses" placeholder="$ 0.00" oninput="saveData()">
-            </div>
-            <div class="input-group">
-                <label class="input-label">Filing State</label>
+                <label class="input-label">Business Jurisdiction</label>
                 <select id="userState" onchange="saveData()">
-                    <option value="none">No State Income Tax</option>
+                    <option value="none">No State Income Tax (TX, FL, WA, etc.)</option>
                     <option value="AL">Alabama</option><option value="AZ">Arizona</option><option value="AR">Arkansas</option>
                     <option value="CA">California</option><option value="CO">Colorado</option><option value="CT">Connecticut</option>
                     <option value="DE">Delaware</option><option value="GA">Georgia</option><option value="HI">Hawaii</option>
@@ -329,163 +165,131 @@
                     <option value="WV">West Virginia</option><option value="WI">Wisconsin</option>
                 </select>
             </div>
-            <button class="primary-btn" onclick="triggerLeadGate()">Analyze My Strategy</button>
+            <button class="primary-btn" onclick="startAudit()">Begin Structural Audit</button>
+        </div>
+
+        <div id="scannerSection">
+            <h3 id="scanText" style="font-size:1.1rem; font-weight:700;">Analyzing 2026 Federal Rates...</h3>
+            <div class="progress-track"><div class="progress-fill" id="pFill"></div></div>
         </div>
 
         <div class="lead-gate" id="leadGate">
-            <h3 style="margin:0 0 10px 0; font-weight:800;">🔒 Strategy Analysis Ready</h3>
-            <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:25px;">Enter your business email to unlock the itemized tax audit and professional PDF report.</p>
+            <h3 style="margin:0 0 10px 0; font-weight:800;">Strategy Analysis Locked</h3>
+            <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:25px;">Enter your business email to unlock the itemized comparison audit and your tailored PDF strategy.</p>
             <input type="email" id="userEmail" placeholder="ceo@company.com" required>
-            <button class="primary-btn" id="unlockBtn" style="margin-top:20px;" onclick="unlockResults()">Unlock Final Strategy</button>
+            <button class="primary-btn" id="unlockBtn" style="margin-top:20px;" onclick="unlockResults()">View Final Audit</button>
         </div>
 
         <div class="result-area" id="resultArea">
             <div id="pdfContent">
-                <div class="pdf-letterhead">
-                    <div class="firm-name">TAX AUDIT REPORT</div>
-                    <div style="font-size:0.75rem; font-weight:800; color:#ef4444; border:2.5px solid #ef4444; padding:4px 9px; border-radius:5px; text-transform:uppercase;">Confidential</div>
+                <div class="pdf-header"><div style="font-weight:900; font-size:1.5rem;">STRATEGY AUDIT</div><div style="font-size:0.75rem; font-weight:800; color:#ef4444; border:2px solid #ef4444; padding:4px 9px; border-radius:5px;">PRIVATE</div></div>
+                
+                <div class="comparison-grid">
+                    <div class="track-box"><div class="track-label">Sole Prop (Current)</div><div id="soleTax" class="track-val" style="color:#ef4444;">$0</div></div>
+                    <div class="track-box highlight"><div class="track-label">LLC S-Corp (Optimized)</div><div id="scorpTax" class="track-val" style="color:#10b981;">$0</div></div>
                 </div>
 
-                <div class="pdf-data-box">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                        <span style="font-size:0.7rem; font-weight:800; color:#64748b; text-transform:uppercase;">Jurisdiction</span>
-                        <span style="font-size:0.7rem; font-weight:800; color:#64748b; text-transform:uppercase;">Audit Date</span>
-                    </div>
-                    <div style="display:flex; justify-content:space-between;">
-                        <span id="pdfStateName" style="font-weight:800; font-size:1.1rem;">N/A</span>
-                        <span id="reportDate" style="font-weight:800; font-size:1.1rem;"></span>
-                    </div>
-                </div>
-                
-                <div style="font-size:0.8rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.05em;">Est. Annual Tax Liability</div>
-                <div class="tax-hero-amount" id="taxAmount">$0.00</div>
+                <div style="font-size:0.7rem; font-weight:800; color:#64748b; text-transform:uppercase;">Estimated Annual Savings</div>
+                <div style="font-size:3.5rem; font-weight:900; margin:5px 0 30px 0;" id="totalSavings">$0.00</div>
                 
                 <table class="audit-table">
-                    <thead><tr><th>Audit Category</th><th style="text-align:right;">Estimated Value</th></tr></thead>
-                    <tbody>
-                        <tr><td>Social Security (12.4% SE)</td><td class="amt" id="ssTaxAmt">$0.00</td></tr>
-                        <tr><td>Medicare (2.9% SE)</td><td class="amt" id="medTaxAmt">$0.00</td></tr>
-                        <tr><td>State Personal Income Tax</td><td class="amt" id="stateTaxAmt">$0.00</td></tr>
-                    </tbody>
+                    <thead><tr style="text-align:left; font-size:0.7rem; color:#64748b; border-bottom:2px solid #e2e8f0;"><th style="padding-bottom:10px;">Audit Item</th><th style="text-align:right;">Estimated Liability</th></tr></thead>
+                    <tbody id="auditRows">
+                        </tbody>
                 </table>
 
-                <div class="insight-card">
-                    <div style="color:#10b981; font-weight:900; font-size:0.9rem; text-transform:uppercase; margin-bottom:12px;">Strategic Structural insight</div>
-                    <div style="font-size:0.85rem; line-height:1.6;" id="savingsMath">
-                        By transitioning to an S-Corp structure, you could potentially bypass a portion of your self-employment taxes.
-                    </div>
+                <div style="background:#0f172a; color:#ffffff; padding:25px; border-radius:16px;">
+                    <div style="color:#10b981; font-weight:900; font-size:0.9rem; margin-bottom:10px;">STRATEGIC INSIGHT</div>
+                    <div style="font-size:0.85rem; line-height:1.6;" id="insightText">Your revenue has officially crossed the S-Corp efficient threshold.</div>
                 </div>
             </div>
             
-            <a href="https://www.google.com/search?q=how+to+start+an+llc" class="cta-btn" target="_blank">Start Your LLC Transition</a>
-            <button class="pdf-btn" onclick="downloadPDF()">📄 Download Audit Strategy (PDF)</button>
-            <button class="reset-btn" onclick="startOver()">🔄 Reset Calculator</button>
+            <a href="https://www.google.com/search?q=how+to+start+an+llc" class="cta-btn" target="_blank">Start LLC Transition</a>
+            <button class="secondary-btn" onclick="downloadPDF()">📄 Download Strategy PDF</button>
+            <button class="secondary-btn" onclick="shareSite()">🔗 Share Strategy with Partner</button>
+            <button class="reset-btn" onclick="location.reload()" style="background:none; border:none; text-decoration:underline; cursor:pointer; color:var(--text-muted); margin-top:15px;">🔄 New Calculation</button>
         </div>
     </div>
 
     <div class="ad-slot">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-1553305917920278"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1553305917920278" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
         <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
-
-    <footer>
-        <p>&copy; 2026 LLC Threshold Strategist</p>
-        <span onclick="alert('Privacy Policy: Your email and revenue data are used solely for tax estimation and strategy reporting.')">Privacy Policy</span> | 
-        <span onclick="alert('Terms of Service: This calculator provides theoretical estimates. Consult a licensed tax professional for actual filing.')">Terms of Service</span>
-    </footer>
-
-    <div class="cookie-banner" id="cookieBanner">
-        <p style="font-size:0.85rem; text-align:center; max-width:800px; line-height:1.5;">We use cookies to maintain your tax estimates and provide personalized audits. By clicking "Accept", you consent to our data processing policies.</p>
-        <button class="primary-btn" style="padding:12px 60px; width:auto; margin-top:15px;" onclick="handleCookieConsent('accepted')">Accept All</button>
     </div>
 
     <script>
         const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
-        const stateTaxRates = { "none": 0.0, "AL": 0.05, "AZ": 0.025, "AR": 0.047, "CA": 0.08, "CO": 0.044, "CT": 0.06, "DE": 0.066, "GA": 0.0549, "HI": 0.07, "ID": 0.058, "IL": 0.0495, "IN": 0.0315, "IA": 0.057, "KS": 0.057, "KY": 0.045, "LA": 0.0425, "ME": 0.0715, "MD": 0.0575, "MA": 0.05, "MI": 0.0425, "MN": 0.068, "MS": 0.04, "MO": 0.0495, "MT": 0.059, "NE": 0.0584, "NJ": 0.06, "NM": 0.049, "NY": 0.06, "NC": 0.045, "ND": 0.025, "OH": 0.035, "OK": 0.0475, "OR": 0.08, "PA": 0.0307, "RI": 0.0599, "SC": 0.064, "UT": 0.0465, "VT": 0.066, "VA": 0.0575, "WV": 0.0495, "WI": 0.053 };
+        const stateRates = { "none": 0.0, "AL": 0.05, "AZ": 0.025, "AR": 0.047, "CA": 0.08, "CO": 0.044, "CT": 0.06, "DE": 0.066, "GA": 0.0549, "HI": 0.07, "ID": 0.058, "IL": 0.0495, "IN": 0.0315, "IA": 0.057, "KS": 0.057, "KY": 0.045, "LA": 0.0425, "ME": 0.0715, "MD": 0.0575, "MA": 0.05, "MI": 0.0425, "MN": 0.068, "MS": 0.04, "MO": 0.0495, "MT": 0.059, "NE": 0.0584, "NJ": 0.06, "NM": 0.049, "NY": 0.06, "NC": 0.045, "ND": 0.025, "OH": 0.035, "OK": 0.0475, "OR": 0.08, "PA": 0.0307, "RI": 0.0599, "SC": 0.064, "UT": 0.0465, "VT": 0.066, "VA": 0.0575, "WV": 0.0495, "WI": 0.053 };
+        let filingStatus = "Single";
 
-        function toggleTheme() {
-            document.body.classList.toggle('dark-mode');
-            localStorage.setItem('app_theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
-        }
-
+        function setStatus(s) { filingStatus = s; document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); saveData(); }
+        function toggleTheme() { document.body.classList.toggle('dark-mode'); localStorage.setItem('app_theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light'); }
+        function saveData() { localStorage.setItem("app_income", document.getElementById('monthlyIncome').value); localStorage.setItem("app_state", document.getElementById('userState').value); }
+        
         window.onload = function() {
             document.getElementById('monthlyIncome').value = localStorage.getItem("app_income") || "";
-            document.getElementById('monthlyExpenses').value = localStorage.getItem("app_expenses") || "";
             document.getElementById('userState').value = localStorage.getItem("app_state") || "none";
             if(localStorage.getItem("app_theme") === 'dark') document.body.classList.add('dark-mode');
-            setTimeout(() => { if(!localStorage.getItem('cookie_consent')) document.getElementById('cookieBanner').classList.add('show'); }, 1500);
-            document.getElementById('reportDate').innerText = new Date().toLocaleDateString();
         }
 
-        function handleCookieConsent(status) { localStorage.setItem('cookie_consent', status); document.getElementById('cookieBanner').classList.remove('show'); }
-        
-        function saveData() { 
-            localStorage.setItem("app_income", document.getElementById('monthlyIncome').value); 
-            localStorage.setItem("app_expenses", document.getElementById('monthlyExpenses').value);
-            localStorage.setItem("app_state", document.getElementById('userState').value); 
-        }
-
-        function triggerLeadGate() {
-            if (!document.getElementById('monthlyIncome').value) { alert("Revenue input required for analysis."); return; }
+        function startAudit() {
+            if(!document.getElementById('monthlyIncome').value) return;
             document.getElementById('inputSection').style.display = 'none';
-            document.getElementById('leadGate').style.display = 'block';
+            document.getElementById('scannerSection').style.display = 'block';
+            document.getElementById('pFill').style.width = '100%';
+            
+            const steps = ["Auditing 2026 Federal Rates...", "Checking State Jurisdictions...", "Optimizing Structural Thresholds..."];
+            let i = 0;
+            const interval = setInterval(() => {
+                document.getElementById('scanText').innerText = steps[i];
+                i++;
+                if(i === steps.length) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        document.getElementById('scannerSection').style.display = 'none';
+                        document.getElementById('leadGate').style.display = 'block';
+                    }, 800);
+                }
+            }, 800);
         }
 
         async function unlockResults() {
             const email = document.getElementById('userEmail').value;
-            if(!email.includes('@')) { alert("Valid business email required."); return; }
-            
+            if(!email.includes('@')) return;
             document.getElementById('unlockBtn').disabled = true;
-            document.getElementById('unlockBtn').innerHTML = "Generating Audit...";
-            
-            const revenue = parseFloat(document.getElementById('monthlyIncome').value);
-            const expenses = parseFloat(document.getElementById('monthlyExpenses').value) || 0;
-            const stateCode = document.getElementById('userState').value;
-            const annualProfit = (revenue - expenses) * 12;
-            
-            const ss = Math.max(0, annualProfit * 0.124); 
-            const med = Math.max(0, annualProfit * 0.029); 
-            const state = Math.max(0, annualProfit * stateTaxRates[stateCode]);
-            const total = ss + med + state;
 
-            // LEAD TIERING Logic
+            const income = parseFloat(document.getElementById('monthlyIncome').value);
+            const stateCode = document.getElementById('userState').value;
+            const profit = income * 12;
+            
+            // MATH Logic
+            const ss = profit * 0.124; const med = profit * 0.029; const state = profit * stateRates[stateCode];
+            const totalSole = ss + med + state;
+            const totalScorp = (ss + med) * 0.4 + state; // Simplified Scorp Distribution Savings
+            const savings = totalSole - totalScorp;
+
             const formData = new FormData();
-            formData.append("Email", email);
-            formData.append("Jurisdiction", stateCode);
-            formData.append("Revenue_Annual", annualProfit);
-            formData.append("Tier", total > 5000 ? "HIGH-VALUE AUDIT" : "STANDARD AUDIT");
+            formData.append("Email", email); formData.append("Status", filingStatus); formData.append("Revenue", profit); formData.append("Savings", savings);
 
             try { await fetch("https://formspree.io/f/mreowvpj", { method: "POST", body: formData, headers: { 'Accept': 'application/json' } }); } catch (e) {}
 
-            confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 }, colors: ['#0f172a', '#10b981', '#3b82f6'] });
-            document.getElementById('leadGate').style.display = 'none';
-            document.getElementById('resultArea').style.display = 'block';
-
-            document.getElementById('taxAmount').innerHTML = formatter.format(total);
-            document.getElementById('ssTaxAmt').innerHTML = formatter.format(ss);
-            document.getElementById('medTaxAmt').innerHTML = formatter.format(med);
-            document.getElementById('stateTaxAmt').innerHTML = formatter.format(state);
-            document.getElementById('pdfStateName').innerHTML = stateCode;
+            confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+            document.getElementById('leadGate').style.display = 'none'; document.getElementById('resultArea').style.display = 'block';
             
-            const potentialSavings = (ss + med) * 0.6;
-            document.getElementById('savingsMath').innerHTML = `By transitioning your structure to an LLC with S-Election, you could potentially save <strong>${formatter.format(potentialSavings)}</strong> annually in Medicare and Social Security taxes based on these profit levels.`;
+            document.getElementById('soleTax').innerText = formatter.format(totalSole);
+            document.getElementById('scorpTax').innerText = formatter.format(totalScorp);
+            document.getElementById('totalSavings').innerText = formatter.format(savings);
+            document.getElementById('auditRows').innerHTML = `<tr><td>Federal SS (12.4%)</td><td class="amt">${formatter.format(ss)}</td></tr><tr><td>Federal Medicare (2.9%)</td><td class="amt">${formatter.format(med)}</td></tr><tr><td>State Personal Tax</td><td class="amt">${formatter.format(state)}</td></tr>`;
+            document.getElementById('insightText').innerHTML = `At ${formatter.format(profit)} annual profit, you are overpaying <strong>${formatter.format(savings)}</strong> in self-employment taxes. Transitioning to an S-Corp structure is highly recommended.`;
         }
 
-        function startOver() { document.getElementById('resultArea').style.display = 'none'; document.getElementById('inputSection').style.display = 'block'; document.getElementById('unlockBtn').disabled = false; }
+        function shareSite() {
+            const text = `Hey, I just calculated my business tax savings on this tool. It shows I could save over ${document.getElementById('totalSavings').innerText} annually! check it out: ${window.location.href}`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+        }
 
         function downloadPDF() {
             const element = document.getElementById('pdfContent');
-            const opt = { 
-                margin: 0.5, 
-                filename: 'Tax_Strategy_Audit.pdf', 
-                html2canvas: { scale: 3, useCORS: true }, 
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } 
-            };
+            const opt = { margin: 0.5, filename: 'Tax_Strategy.pdf', html2canvas: { scale: 3 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } };
             html2pdf().set(opt).from(element).save();
         }
     </script>
