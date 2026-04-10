@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>The LLC Threshold Calculator | Save on Taxes</title>
+    <meta name="description" content="Calculate your side-hustle self-employment tax and find out if forming an LLC or S-Corp could save you thousands.">
+    
+    <meta property="og:title" content="The LLC Threshold Calculator">
+    <meta property="og:description" content="Find out exactly when you should form an LLC to save on taxes.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630.png?text=LLC+Calculator">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-navy: #0f172a;
+            --primary-navy-hover: #1e293b;
+            --success-green: #10b981;
+            --success-green-hover: #059669;
+            --danger-red: #ef4444;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --text-muted: #64748b;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .calculator-container {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 480px;
+            padding: 48px 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08), 
+                        0 10px 15px -3px rgba(0, 0, 0, 0.04),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calculator-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary-navy), #3b82f6);
+        }
+
+        h2 {
+            color: var(--primary-navy);
+            margin-top: 0;
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        p.subtitle {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            font-weight: 400;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--primary-navy);
+            margin-bottom: 8px;
+        }
+
+        .currency-symbol {
+            position: absolute;
+            left: 16px;
+            bottom: 14px;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 14px 16px 14px 40px;
+            background-color: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            color: var(--primary-navy);
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            background-color: #ffffff;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+
+        button.calc-btn {
+            width: 100%;
+            background-color: var(--primary-navy);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.2);
+            margin-top: 10px;
+        }
+
+        button.calc-btn:hover {
+            background-color: var(--primary-navy-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 8px -1px rgba(15, 23, 42, 0.3);
+        }
+
+        .result-area {
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 1px solid #e2e8f0;
+            display: none;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tax-estimate {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        .tax-amount {
+            font-weight: 700;
+            color: var(--primary-navy);
+            font-size: 2.5rem;
+            letter-spacing: -0.02em;
+            margin: 0 0 24px 0;
+        }
+
+        /* --- NEW: Visual Data Bar Styling --- */
+        .visual-bar-container {
+            width: 100%;
+            height: 24px;
+            background-color: #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            margin-bottom: 12px;
+        }
+
+        .take-home-bar {
+            height: 100%;
+            background-color: var(--primary-navy);
+            width: 0%; /* Set dynamically by JS */
+            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tax-bar {
+            height: 100%;
+            background-color: var(--danger-red);
+            width: 0%; /* Set dynamically by JS */
+            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .legend {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .dot-navy { height: 10px; width: 10px; background-color: var(--primary-navy); border-radius: 50%; }
+        .dot-red { height: 10px; width: 10px; background-color: var(--danger-red); border-radius: 50%; }
+
+        .threshold-message {
+            color: var(--success-green);
+            background-color: #ecfdf5;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 24px;
+            display: none;
+            border: 1px solid #a7f3d0;
+        }
+
+        .cta-btn {
+            display: none;
+            background-color: var(--success-green);
+            color: white;
+            text-decoration: none;
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            width: 100%;
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            animation: softPulse 2.5s infinite;
+        }
+
+        @keyframes softPulse {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            70% { box-shadow: 0 0 0 12px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .cta-btn:hover {
+            background-color: var(--success-green-hover);
+            transform: translateY(-2px);
+            animation: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculator-container">
+        <h2>LLC Threshold Calculator</h2>
+        <p class="subtitle">Estimate your self-employment tax burden instantly.</p>
+
+        <div class="input-group">
+            <label class="input-label" for="monthlyIncome">Estimated Monthly Revenue</label>
+            <span class="currency-symbol">$</span>
+            <input type="number" id="monthlyIncome" placeholder="0.00" min="0" step="any">
+        </div>
+
+        <div class="input-group">
+            <label class="input-label" for="monthlyExpenses">Estimated Monthly Expenses</label>
+            <span class="currency-symbol">$</span>
+            <input type="number" id="monthlyExpenses" placeholder="0.00" min="0" step="any">
+        </div>
+
+        <button class="calc-btn" onclick="calculateTax()">Calculate My Tax</button>
+
+        <div class="result-area" id="resultArea">
+            <div class="tax-estimate">Estimated Annual SE Tax</div>
+            <div class="tax-amount" id="taxAmount">$0.00</div>
+            
+            <div class="visual-bar-container">
+                <div class="take-home-bar" id="takeHomeBar"></div>
+                <div class="tax-bar" id="taxBar"></div>
+            </div>
+            <div class="legend">
+                <div class="legend-item"><span class="dot-navy"></span> Annual Take-Home</div>
+                <div class="legend-item"><span class="dot-red"></span> Estimated Tax</div>
+            </div>
+
+            <div class="threshold-message" id="thresholdMessage">
+                💡 You are making enough net profit that forming an LLC or S-Corp could save you thousands in taxes!
+            </div>
+            
+            <a href="#" class="cta-btn" id="ctaBtn" target="_blank" rel="noopener noreferrer">Start Your LLC Today</a>
+        </div>
+    </div>
+
+    <script>
+        const formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+        });
+
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const easeOutProgress = 1 - Math.pow(1 - progress, 3);
+                const currentVal = (easeOutProgress * (end - start) + start);
+                obj.innerHTML = formatter.format(currentVal);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        function calculateTax() {
+            const incomeInput = document.getElementById('monthlyIncome').value;
+            const monthlyIncome = parseFloat(incomeInput);
+
+            const expensesInput = document.getElementById('monthlyExpenses').value;
+            const monthlyExpenses = expensesInput ? parseFloat(expensesInput) : 0;
+
+            if (isNaN(monthlyIncome) || monthlyIncome < 0 || monthlyExpenses < 0) {
+                alert("Please enter valid, positive numbers.");
+                return;
+            }
+
+            const netMonthlyProfit = monthlyIncome - monthlyExpenses;
+            
+            if (netMonthlyProfit <= 0) {
+                document.getElementById('resultArea').style.display = 'block';
+                document.getElementById('taxAmount').innerHTML = "$0.00";
+                // Reset bars
+                document.getElementById('takeHomeBar').style.width = '0%';
+                document.getElementById('taxBar').style.width = '0%';
+                document.getElementById('thresholdMessage').style.display = 'none';
+                document.getElementById('ctaBtn').style.display = 'none';
+                return;
+            }
+
+            const annualProfit = netMonthlyProfit * 12;
+            const selfEmploymentTaxRate = 0.153; 
+            const estimatedTax = annualProfit * selfEmploymentTaxRate;
+            const takeHomePay = annualProfit - estimatedTax;
+
+            document.getElementById('resultArea').style.display = 'block';
+            
+            const taxAmountElement = document.getElementById('taxAmount');
+            animateValue(taxAmountElement, 0, estimatedTax, 1200);
+
+            // Calculate percentages for the visual bar
+            const takeHomePercentage = (takeHomePay / annualProfit) * 100;
+            const taxPercentage = (estimatedTax / annualProfit) * 100;
+
+            // Small delay so the bar animates smoothly after the area is revealed
+            setTimeout(() => {
+                document.getElementById('takeHomeBar').style.width = `${takeHomePercentage}%`;
+                document.getElementById('taxBar').style.width = `${taxPercentage}%`;
+            }, 50);
+
+            const thresholdMessage = document.getElementById('thresholdMessage');
+            const ctaBtn = document.getElementById('ctaBtn');
+
+            if (netMonthlyProfit > 4000) {
+                setTimeout(() => {
+                    thresholdMessage.style.display = 'block';
+                    ctaBtn.style.display = 'inline-block';
+                }, 800);
+            } else {
+                thresholdMessage.style.display = 'none';
+                ctaBtn.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
